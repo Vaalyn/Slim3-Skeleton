@@ -1,6 +1,10 @@
 <?php
 	require '../vendor/autoload.php';
-	require '../db/sql_manager.php';
+	
+	// Include all db classes
+	foreach (glob('../db/*.php') as $DBFile) {
+	    include_once $DBFile;
+	}
 	
 	// Include all entities
 	foreach (glob('../entity/*.php') as $EntityFile) {

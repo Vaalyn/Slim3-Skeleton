@@ -1,7 +1,7 @@
 <?php
 
 	class SQL_Manager {
-		protected $connection;
+		public $connection;
 		
 		function __construct() {
 			require __DIR__ . '/../config/db.config.php';
@@ -16,14 +16,12 @@
 		   		die($mysqli->connect_error);
 		   	}
 		   	else {
-		   		global $connection;
-				$connection = $mysqli;
+				$this->connection = $mysqli;
 		   	}
 		}
 		
 		function disconnect() {
-			global $connection;
-			$connection->close();
+			$this->connection->close();
 		}
 	}
 	
