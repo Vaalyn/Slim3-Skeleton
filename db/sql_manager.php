@@ -3,9 +3,8 @@
 	class SQL_Manager {
 		public $connection;
 		
-		function __construct() {
-			require __DIR__ . '/../config/db.config.php';
-			$this->connect($DB_SERVER, $DB_USER, $DB_PASSWORD, $DB_DB);
+		function __construct($config) {
+			$this->connect($config['server'], $config['username'], $config['password'], $config['database']);
 		}
 		
 		function connect($server, $user, $pw, $db) {
