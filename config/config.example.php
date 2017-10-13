@@ -1,14 +1,30 @@
 <?php
 	return array(
 		'settings' => array(
-			'displayErrorDetails' => true,
+			'determineRouteBeforeAppMiddleware' => true,
+			'displayErrorDetails' => false
 		),
 		'config' => array(
 			'database' => array(
-				'server' 	=> '<hostname>',
-				'database' 	=> '<database>',
-				'username' 	=> '<username>',
-				'password' 	=> '<password>'
+				'driver'    => '',
+				'host' 	    => '',
+				'database' 	=> '',
+				'username' 	=> '',
+				'password' 	=> '',
+				'charset'   => 'utf8',
+				'collation' => 'utf8_unicode_ci',
+				'prefix'    => ''
+			),
+			'auth' => array(
+				'cookie' => array(
+					'name'     => 'remember',
+					'expire'   => 2592000,
+					'domain'   => '',
+					'secure'   => false,
+					'httponly' => true
+				),
+				'routes' => array(
+				)
 			)
 		)
 	);
