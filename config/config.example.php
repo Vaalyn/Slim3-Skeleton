@@ -13,7 +13,8 @@
 				'password' 	=> '',
 				'charset'   => 'utf8',
 				'collation' => 'utf8_unicode_ci',
-				'prefix'    => ''
+				'prefix'    => '',
+				'port'      => 3306
 			),
 			'auth' => array(
 				'cookie' => array(
@@ -24,6 +25,9 @@
 					'httponly' => true
 				),
 				'routes' => array(
+					'dashboard'
+				),
+				'local' => array(
 				)
 			)
 		)

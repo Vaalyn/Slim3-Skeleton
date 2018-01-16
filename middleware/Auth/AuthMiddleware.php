@@ -1,4 +1,6 @@
 <?php
+	namespace Middleware\Auth;
+
 	class AuthMiddleware {
 
 		private $container;
@@ -15,7 +17,7 @@
 				$protectedRoutes  = $this->container->config['auth']['routes'];
 				$localRoutes      = $this->container->config['auth']['local'];
 
-				if (!empty($currentRoute) && in_array($currentRouteName, $protectedRoutes)) {
+				if (!empty($currentRoute) && (in_array($currentRouteName, $protectedRoutes) || array_key_exists($currentRouteName, $protectedRoutes))) {
 					if (!$this->container->auth->check()) {
 						return $response->withRedirect($this->container->router->pathFor('login'));
 					}
@@ -46,6 +48,4 @@
 			return $response;
 		}
 	}
-
-	$app->add(new AuthMiddleware($container));
 ?>

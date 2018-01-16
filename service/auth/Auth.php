@@ -37,7 +37,7 @@
 
 			if (password_verify($password, $user->password)) {
 				$_SESSION['username'] = $user->username;
-				$this->setLoginCookie($user['username'], password_hash($user->username . $user->password, PASSWORD_DEFAULT));
+				$this->setLoginCookie($user->username, password_hash($user->username . $user->password, PASSWORD_DEFAULT));
 				return true;
 			}
 

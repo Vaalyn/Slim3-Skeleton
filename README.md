@@ -1,5 +1,5 @@
 # Slim3-Skeleton
-A simple Skeleton for Slim Framework 3 with PHP-View as templating engine and a few example files
+A simple Skeleton for Slim Framework 3 with PHP-View as templating engine, eloquent as ORM, Phinx for migrations and a simple log-in system.
 
 # Installation
 Clone with GIT:
