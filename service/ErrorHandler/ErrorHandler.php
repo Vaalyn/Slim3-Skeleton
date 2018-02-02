@@ -2,23 +2,36 @@
 	namespace Service\ErrorHandler;
 
 	use Psr\Container\ContainerInterface;
+	use Slim\Http\Request;
+	use Slim\Http\Response;
 
 	class ErrorHandler {
 
 		/**
-		 * @var ContainerInterface
+		 * @var \Psr\Container\ContainerInterface
 		 */
 		protected $container;
 
-		public function __invoke(ContainerInterface $container) {
+		/**
+		 * @param \Psr\Container\ContainerInterface $container
+		 *
+		 * @return \Slim\Http\Response
+		 */
+		public function __invoke(ContainerInterface $container): Response {
 			$this->container = $container;
 
-			return function($request, $response, $error) {
+			return function(Request $request, Response $response, \Throwable $error) {
 				return $this->createErrorResponse($response, $error);
 			};
 		}
 
-		private function createErrorResponse($response, $error) {
+		/**
+		 * @param \Slim\Http\Response $response
+		 * @param \Throwable $error
+		 *
+		 * @return \Slim\Http\Response
+		 */
+		private function createErrorResponse(Response $response, \Throwable $error) {
 			$message = 'Beim Verarbeiten der Anfrage ist ein Fehler aufgetreten.';
 
 			if ($this->container->settings['displayErrorDetails']) {

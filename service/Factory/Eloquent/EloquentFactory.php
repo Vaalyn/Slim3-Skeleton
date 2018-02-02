@@ -7,7 +7,8 @@
 
 		/**
 		 * @param array $config
-		 * @return Manager
+		 * 
+		 * @return \Illuminate\Database\Capsule\Manager
 		 */
 		public static function create(array $config): Manager {
 			$capsule = new Manager;

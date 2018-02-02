@@ -8,25 +8,25 @@
 	class LoginController {
 
 		/**
-		 * @var ContainerInterface
+		 * @var \Psr\Container\ContainerInterface
 		 */
 		protected $container;
 
 		/**
-		 * @param ContainerInterface $container
+		 * @param \Psr\Container\ContainerInterface $container
 		 */
 		public function __construct(ContainerInterface $container) {
 			$this->container = $container;
 		}
 
 		/**
-		 * @param  Request $request
-		 * @param  Response $response
-		 * @param  array $args
+		 * @param \Slim\Http\Request $request
+		 * @param \Slim\Http\Response $response
+		 * @param array $args
 		 *
 		 * @return void
 		 */
-		public function getLoginAction($request, $response, $args) {
+		public function getLoginAction(Request $request, Response $response, array $args) {
 			if ($this->container->auth->check()) {
 				if (count($request->getHeader('HTTP_REFERER'))) {
 					return $response->withRedirect($request->getHeader('HTTP_REFERER')[0]);
@@ -45,13 +45,13 @@
 		}
 
 		/**
-		 * @param  Request $request
-		 * @param  Response $response
-		 * @param  array $args
+		 * @param \Slim\Http\Request $request
+		 * @param \Slim\Http\Response $response
+		 * @param array $args
 		 *
 		 * @return void
 		 */
-		public function loginAction($request, $response, $args) {
+		public function loginAction(Request $request, Response $response, array $args) {
 			$username = $request->getParsedBody()['username'] ?? null;
 			$password = $request->getParsedBody()['password'] ?? null;
 			$referer = $request->getParsedBody()['referer'] ?? null;

@@ -1,26 +1,48 @@
 <?php
 	namespace Service\Auth;
 
+	use Model\User;
+	use Psr\Container\ContainerInterface;
+
 	class Auth {
+		/**
+		 * @var \Psr\Container\ContainerInterface
+		 */
 		private $container;
 
-		public function __construct($container) {
+		/**
+		 * @param \Psr\Container\ContainerInterface $container
+		 */
+		public function __construct(ContainerInterface $container) {
 			$this->container = $container;
 		}
 
-		public function user() {
-			return $this->container->database->table('user')->where('username', $_SESSION['username'])->first();
+		/**
+		 * @return null|\Model\User
+		 */
+		public function user(): User {
+			return $user = User::where('username', '=', $_SESSION['username'])->first();
 		}
 
-		public function check() {
+		/**
+		 * @return bool
+		 */
+		public function check(): bool {
 			if (!isset($_SESSION['username'])) {
 				$this->checkLoginCookie();
+			}
+
+			if (!User::where('username', '=', $_SESSION['username'])->exists()) {
+				$this->logout();
 			}
 
 			return isset($_SESSION['username']);
 		}
 
-		public function isAdmin() {
+		/**
+		 * @return bool
+		 */
+		public function isAdmin(): bool {
 			if ($this->user()->is_admin === 1) {
 				return true;
 			}
@@ -28,10 +50,16 @@
 			return false;
 		}
 
-		public function attempt($username, $password) {
-			$user = $this->container->database->table('user')->where('username', $username)->first();
+		/**
+		 * @param string $username
+		 * @param string $password
+		 *
+		 * @return bool
+		 */
+		public function attempt(string $username, string $password): bool {
+			$user = User::where('username', '=', $username)->first();
 
-			if (empty($user)) {
+			if (!isset($user)) {
 				return false;
 			}
 
@@ -44,7 +72,13 @@
 			return false;
 		}
 
-		private function setLoginCookie($username, $identificationHash) {
+		/**
+		 * @param string $username
+		 * @param string $identificationHash
+		 *
+		 * @return bool
+		 */
+		private function setLoginCookie(string $username, string $identificationHash): bool {
 			setcookie(
 				$this->container->get('config')['auth']['cookie']['name'],
 				json_encode(['username' => $username, 'identificationHash' => $identificationHash]),
@@ -56,10 +90,13 @@
 			);
 		}
 
-		private function checkLoginCookie() {
+		/**
+		 * @return void
+		 */
+		private function checkLoginCookie(): void {
 			if (isset($_COOKIE[$this->container->get('config')['auth']['cookie']['name']])) {
 				$cookie = json_decode($_COOKIE[$this->container->get('config')['auth']['cookie']['name']]);
-				$user   = $this->container->database->table('user')->where('username', $cookie->username)->first();
+				$user   = $user = User::where('username', '=', $cookie->username)->first();
 
 				if (isset($user->password)) {
 					if (password_verify($user->username . $user->password, $cookie->identificationHash)) {
@@ -69,7 +106,10 @@
 			}
 		}
 
-		public function logout() {
+		/**
+		 * @return void
+		 */
+		public function logout(): void {
 			unset($_SESSION['username']);
 			unset($_COOKIE[$this->container->get('config')['auth']['cookie']['name']]);
 			setcookie(
