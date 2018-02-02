@@ -26,10 +26,12 @@ class Migration extends AbstractMigration {
      */
     public function change() {
 		$this->table('user', ['id' => false, 'primary_key' => ['user_id']])
-			->addColumn('user_id', 'integer',  ['identity' => true])
-			->addColumn('username', 'string',  ['limit' => 255, 'null' => false])
-			->addColumn('password', 'string',  ['limit' => 255, 'null' => false])
-			->addColumn('is_admin', 'boolean', ['default' => false, 'null' => false])
+			->addColumn('user_id',     'integer',  ['identity' => true])
+			->addColumn('username',    'string',  ['limit' => 255, 'null' => false])
+			->addColumn('password',    'string',  ['limit' => 255, 'null' => false])
+			->addColumn('is_admin',    'boolean', ['default' => false, 'null' => false])
+			->addColumn('created_at',  'datetime', ['null' => false])
+			->addColumn('updated_at',  'datetime', ['null' => false])
 			->save();
     }
 }
