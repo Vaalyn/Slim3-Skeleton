@@ -1,0 +1,19 @@
+.color-1 {
+	background-color: #48bed9;
+}
+
+.btn.color-1:hover,
+.btn.color-1:focus,
+.btn-floating.color-1:hover,
+.btn-floating.color-1:focus {
+	background-color: #29a6c2;
+}
+
+.color-2 {
+	background-color: #5fcd55;
+}
+
+.btn.color-2:hover,
+.btn.color-2:focus {
+	background-color: #43b536;
+}

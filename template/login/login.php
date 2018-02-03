@@ -41,9 +41,11 @@
 								</div>
 							</div>
 							<div class="row center">
-								<button class="btn waves-effect waves-light color-1" type="submit">Login
-									<i class="material-icons right">lock_open</i>
-								</button>
+								<div class="col s12">
+									<button class="btn waves-effect waves-light color-1" type="submit">Login
+										<i class="material-icons right">lock_open</i>
+									</button>
+								</div>
 							</div>
 						</form>
 					</div>

@@ -28,3 +28,19 @@
 	-moz-osx-font-smoothing: grayscale;
 	font-feature-settings: 'liga';
 }
+
+html {
+	font-family: 'Open Sans', Verdana, Geneva, sans-serif;
+}
+
+main {
+	margin: 15px 0;
+}
+
+h3.card-title {
+	margin-top: 0;
+}
+
+h3.card-title + .divider {
+	margin-bottom: 15px;
+}
