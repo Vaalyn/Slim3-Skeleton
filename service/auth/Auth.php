@@ -53,10 +53,11 @@
 		/**
 		 * @param string $username
 		 * @param string $password
+		 * @param bool $rememberMe
 		 *
 		 * @return bool
 		 */
-		public function attempt(string $username, string $password): bool {
+		public function attempt(string $username, string $password, bool $rememberMe = false): bool {
 			$user = User::where('username', '=', $username)->first();
 
 			if (!isset($user)) {
@@ -65,7 +66,11 @@
 
 			if (password_verify($password, $user->password)) {
 				$_SESSION['username'] = $user->username;
-				$this->setLoginCookie($user->username, password_hash($user->username . $user->password, PASSWORD_DEFAULT));
+
+				if ($rememberMe) {
+					$this->setLoginCookie($user->username, password_hash($user->username . $user->password, PASSWORD_DEFAULT));
+				}
+
 				return true;
 			}
 

@@ -40,6 +40,12 @@
 									<label for="password">Password</label>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col s12 center">
+									<input name="remember_me" id="remember-me" class="filled-in" type="checkbox" />
+									<label for="remember-me">Remember Me</label>
+								</div>
+							</div>
 							<div class="row center">
 								<div class="col s12">
 									<button class="btn waves-effect waves-light color-1" type="submit">Login
