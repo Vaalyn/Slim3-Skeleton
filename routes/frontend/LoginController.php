@@ -55,8 +55,9 @@
 			$username = $request->getParsedBody()['username'] ?? null;
 			$password = $request->getParsedBody()['password'] ?? null;
 			$referer = $request->getParsedBody()['referer'] ?? null;
+			$rememberMe = isset($request->getParsedBody()['remember_me']) ? true : false;
 
-			if (!$this->container->auth->attempt($username, $password)) {
+			if (!$this->container->auth->attempt($username, $password, $rememberMe)) {
 				$this->container->flash->addMessage('Login error', 'Username or password incorrect');
 				return $response->withRedirect($this->container->router->pathFor('login'));
 			}
