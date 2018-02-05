@@ -76,9 +76,9 @@
 		 * @param string $username
 		 * @param string $identificationHash
 		 *
-		 * @return bool
+		 * @return void
 		 */
-		private function setLoginCookie(string $username, string $identificationHash): bool {
+		private function setLoginCookie(string $username, string $identificationHash): void {
 			setcookie(
 				$this->container->get('config')['auth']['cookie']['name'],
 				json_encode(['username' => $username, 'identificationHash' => $identificationHash]),
