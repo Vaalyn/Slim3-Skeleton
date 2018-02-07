@@ -40,7 +40,7 @@
 						return $response->withRedirect($this->container->router->pathFor('login'));
 					}
 
-					if (is_array($protectedRoutes[$currentRouteName]) && in_array('admin', $protectedRoutes[$currentRouteName]) && !$this->container->auth->isAdmin()) {
+					if (isset($protectedRoutes[$currentRouteName]) && in_array('admin', $protectedRoutes[$currentRouteName]) && !$this->container->auth->isAdmin()) {
 						return $response->withStatus(400)
 									->withHeader('Content-Type', 'application/json')
 									->write(json_encode(array(
