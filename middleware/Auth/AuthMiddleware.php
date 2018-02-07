@@ -6,7 +6,6 @@
 	use Slim\Http\Response;
 
 	class AuthMiddleware {
-
 		/**
 		 * @var \Psr\Container\ContainerInterface
 		 */

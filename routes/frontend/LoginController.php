@@ -6,7 +6,6 @@
 	use Slim\Http\Response;
 
 	class LoginController {
-
 		/**
 		 * @var \Psr\Container\ContainerInterface
 		 */

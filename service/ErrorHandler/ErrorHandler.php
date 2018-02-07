@@ -7,7 +7,6 @@
 	use Slim\Http\Response;
 
 	class ErrorHandler {
-
 		/**
 		 * @var \Psr\Container\ContainerInterface
 		 */

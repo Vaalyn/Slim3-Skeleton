@@ -4,10 +4,9 @@
 	use Illuminate\Database\Capsule\Manager;
 
 	class EloquentFactory {
-
 		/**
 		 * @param array $config
-		 * 
+		 *
 		 * @return \Illuminate\Database\Capsule\Manager
 		 */
 		public static function create(array $config): Manager {

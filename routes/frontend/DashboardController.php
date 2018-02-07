@@ -6,7 +6,6 @@
 	use Slim\Http\Response;
 
 	class DashboardController {
-
 		/**
 		 * @var \Psr\Container\ContainerInterface
 		 */

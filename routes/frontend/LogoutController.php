@@ -6,7 +6,6 @@
 	use Slim\Http\Response;
 
 	class LogoutController {
-
 		/**
 		 * @var \Psr\Container\ContainerInterface
 		 */
