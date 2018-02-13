@@ -23,9 +23,9 @@
 		 * @param \Slim\Http\Response $response
 		 * @param array $args
 		 *
-		 * @return void
+		 * @return \Slim\Http\Response
 		 */
-		public function getLoginAction(Request $request, Response $response, array $args) {
+		public function getLoginAction(Request $request, Response $response, array $args): Response {
 			if ($this->container->auth->check()) {
 				if (count($request->getHeader('HTTP_REFERER'))) {
 					return $response->withRedirect($request->getHeader('HTTP_REFERER')[0]);
@@ -48,9 +48,9 @@
 		 * @param \Slim\Http\Response $response
 		 * @param array $args
 		 *
-		 * @return void
+		 * @return \Slim\Http\Response
 		 */
-		public function loginAction(Request $request, Response $response, array $args) {
+		public function loginAction(Request $request, Response $response, array $args): Response {
 			$username = $request->getParsedBody()['username'] ?? null;
 			$password = $request->getParsedBody()['password'] ?? null;
 			$referer = $request->getParsedBody()['referer'] ?? null;

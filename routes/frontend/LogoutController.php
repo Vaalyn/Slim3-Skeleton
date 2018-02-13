@@ -23,9 +23,9 @@
 		 * @param \Slim\Http\Response $response
 		 * @param array $args
 		 *
-		 * @return void
+		 * @return \Slim\Http\Response
 		 */
-		public function __invoke(Request $request, Response $response, array $args) {
+		public function __invoke(Request $request, Response $response, array $args): Response {
 			$this->container->auth->logout();
 			return $response->withRedirect($this->container->router->pathFor('login'));
 		}
