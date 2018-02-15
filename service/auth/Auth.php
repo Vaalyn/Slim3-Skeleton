@@ -101,7 +101,7 @@
 		private function checkLoginCookie(): void {
 			if (isset($_COOKIE[$this->container->get('config')['auth']['cookie']['name']])) {
 				$cookie = json_decode($_COOKIE[$this->container->get('config')['auth']['cookie']['name']]);
-				$user   = $user = User::where('username', '=', $cookie->username)->first();
+				$user   = User::where('username', '=', $cookie->username)->first();
 
 				if (isset($user->password)) {
 					if (password_verify($user->username . $user->password, $cookie->identificationHash)) {
