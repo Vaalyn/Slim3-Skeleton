@@ -109,10 +109,12 @@
 			$token = bin2hex(random_bytes(16));
 
 			$authToken                = new AuthToken();
-			$authToken->auth_token_id = Uuid::uuid4();
+			$authToken->auth_token_id = Uuid::uuid4()->toString();
 			$authToken->user_id       = $user->user_id;
 			$authToken->token         = password_hash($token, PASSWORD_DEFAULT);
 			$authToken->save();
+
+			$_SESSION['auth_token_id'] = $authToken->auth_token_id;
 
 			return $token;
 		}
@@ -153,6 +155,7 @@
 				foreach ($authTokens as $authToken) {
 					if (password_verify($cookie->token, $authToken->token)) {
 						$_SESSION['user_id'] = $authToken->user->user_id;
+						$_SESSION['auth_token_id'] = $authToken->auth_token_id;
 
 						break;
 					}
@@ -165,6 +168,7 @@
 		 */
 		public function logout(): void {
 			unset($_SESSION['user_id']);
+			unset($_SESSION['auth_token_id']);
 			unset($_COOKIE[$this->container->config['auth']['cookie']['name']]);
 			setcookie(
 				$this->container->config['auth']['cookie']['name'],
