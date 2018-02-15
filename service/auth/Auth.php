@@ -4,7 +4,7 @@
 	use Model\User;
 	use Psr\Container\ContainerInterface;
 
-	class Auth {
+	class Auth implements AuthInterface {
 		/**
 		 * @var \Psr\Container\ContainerInterface
 		 */
