@@ -17,6 +17,7 @@
 		        'pass' => $config['config']['database']['password'],
 		        'port' => $config['config']['database']['port'],
 		        'charset' => $config['config']['database']['charset'],
+				'collation' => $config['config']['database']['collation'],
 				'table_prefix' => $config['config']['database']['prefix']
 			]
 		],
