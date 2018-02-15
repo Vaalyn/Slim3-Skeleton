@@ -25,13 +25,23 @@ class Migration extends AbstractMigration {
      * with the Table class.
      */
     public function change() {
+		$this->table('auth_token', ['id' => false, 'primary_key' => ['auth_token_id']])
+			->addColumn('auth_token_id', 'uuid',     [])
+			->addColumn('user_id',       'integer',  ['null' => false])
+			->addColumn('token',         'string',   ['limit' => 255, 'null' => false])
+			->addColumn('created_at',    'datetime', ['null' => false])
+			->addColumn('updated_at',    'datetime', ['null' => false])
+			->addColumn('deleted_at',    'datetime', ['default' => null, 'null' => true])
+			->save();
+
 		$this->table('user', ['id' => false, 'primary_key' => ['user_id']])
 			->addColumn('user_id',     'integer',  ['identity' => true])
-			->addColumn('username',    'string',  ['limit' => 255, 'null' => false])
-			->addColumn('password',    'string',  ['limit' => 255, 'null' => false])
-			->addColumn('is_admin',    'boolean', ['default' => false, 'null' => false])
+			->addColumn('username',    'string',   ['limit' => 255, 'null' => false])
+			->addColumn('password',    'string',   ['limit' => 255, 'null' => false])
+			->addColumn('is_admin',    'boolean',  ['default' => false, 'null' => false])
 			->addColumn('created_at',  'datetime', ['null' => false])
 			->addColumn('updated_at',  'datetime', ['null' => false])
+			->addColumn('deleted_at',  'datetime', ['default' => null, 'null' => true])
 			->save();
     }
 }

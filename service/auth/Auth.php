@@ -1,8 +1,11 @@
 <?php
 	namespace Service\Auth;
 
+	use Carbon\Carbon;
+	use Model\AuthToken;
 	use Model\User;
 	use Psr\Container\ContainerInterface;
+	use Ramsey\Uuid\Uuid;
 
 	class Auth implements AuthInterface {
 		/**
@@ -21,22 +24,22 @@
 		 * @return null|\Model\User
 		 */
 		public function user(): User {
-			return $user = User::where('username', '=', $_SESSION['username'])->first();
+			return $user = User::where('user_id', '=', $_SESSION['user_id'])->first();
 		}
 
 		/**
 		 * @return bool
 		 */
 		public function check(): bool {
-			if (!isset($_SESSION['username'])) {
+			if (!isset($_SESSION['user_id'])) {
 				$this->checkLoginCookie();
 			}
 
-			if (!User::where('username', '=', $_SESSION['username'])->exists()) {
+			if (!User::where('user_id', '=', $_SESSION['user_id'])->exists()) {
 				$this->logout();
 			}
 
-			return isset($_SESSION['username']);
+			return isset($_SESSION['user_id']);
 		}
 
 		/**
@@ -65,10 +68,10 @@
 			}
 
 			if (password_verify($password, $user->password)) {
-				$_SESSION['username'] = $user->username;
+				$_SESSION['user_id'] = $user->user_id;
 
 				if ($rememberMe) {
-					$this->setLoginCookie($user->username, password_hash($user->username . $user->password, PASSWORD_DEFAULT));
+					$this->setLoginCookie($user);
 				}
 
 				return true;
@@ -78,34 +81,80 @@
 		}
 
 		/**
-		 * @param string $username
-		 * @param string $identificationHash
+		 * @param \Model\User $user
 		 *
 		 * @return void
 		 */
-		private function setLoginCookie(string $username, string $identificationHash): void {
+		private function setLoginCookie(User $user): void {
 			setcookie(
-				$this->container->get('config')['auth']['cookie']['name'],
-				json_encode(['username' => $username, 'identificationHash' => $identificationHash]),
-				time() + $this->container->get('config')['auth']['cookie']['expire'],
+				$this->container->config['auth']['cookie']['name'],
+				json_encode([
+					'username' => $user->username,
+					'token' => $this->generateLoginCookieToken($user)
+				]),
+				time() + $this->container->config['auth']['cookie']['expire'],
 				'/',
-				$this->container->get('config')['auth']['cookie']['domain'],
-				$this->container->get('config')['auth']['cookie']['secure'],
-				$this->container->get('config')['auth']['cookie']['httponly']
+				$this->container->config['auth']['cookie']['domain'],
+				$this->container->config['auth']['cookie']['secure'],
+				$this->container->config['auth']['cookie']['httponly']
 			);
+		}
+
+		/**
+		 * @param \Model\User $user
+		 *
+		 * @return string
+		 */
+		private function generateLoginCookieToken(User $user): string {
+			$token = bin2hex(random_bytes(16));
+
+			$authToken                = new AuthToken();
+			$authToken->auth_token_id = Uuid::uuid4();
+			$authToken->user_id       = $user->user_id;
+			$authToken->token         = password_hash($token, PASSWORD_DEFAULT);
+			$authToken->save();
+
+			return $token;
+		}
+
+		/**
+		 * @return void
+		 */
+		public function invalidateAuthTokens(): void {
+			$invalidationDateTime = new Carbon();
+			$invalidationDateTime->subSeconds($this->container->config['auth']['cookie']['expire']);
+
+			$authTokens = AuthToken::where('created_at', '<', $invalidationDateTime->toDateTimeString())->get();
+
+			foreach ($authTokens as $authToken) {
+				$this->invalidateAuthToken($authToken);
+			}
+		}
+
+		/**
+		 * @param \Model\AuthToken $authToken
+		 *
+		 * @return void
+		 */
+		public function invalidateAuthToken(AuthToken $authToken): void {
+			$authToken->delete();
 		}
 
 		/**
 		 * @return void
 		 */
 		private function checkLoginCookie(): void {
-			if (isset($_COOKIE[$this->container->get('config')['auth']['cookie']['name']])) {
-				$cookie = json_decode($_COOKIE[$this->container->get('config')['auth']['cookie']['name']]);
-				$user   = User::where('username', '=', $cookie->username)->first();
+			$this->invalidateAuthTokens();
 
-				if (isset($user->password)) {
-					if (password_verify($user->username . $user->password, $cookie->identificationHash)) {
-						$_SESSION['username'] = $user->username;
+			if (isset($_COOKIE[$this->container->config['auth']['cookie']['name']])) {
+				$cookie     = json_decode($_COOKIE[$this->container->config['auth']['cookie']['name']]);
+				$authTokens = User::where('username', '=', $cookie->username)->first()->authTokens;
+
+				foreach ($authTokens as $authToken) {
+					if (password_verify($cookie->token, $authToken->token)) {
+						$_SESSION['user_id'] = $authToken->user->user_id;
+
+						break;
 					}
 				}
 			}
@@ -115,16 +164,16 @@
 		 * @return void
 		 */
 		public function logout(): void {
-			unset($_SESSION['username']);
-			unset($_COOKIE[$this->container->get('config')['auth']['cookie']['name']]);
+			unset($_SESSION['user_id']);
+			unset($_COOKIE[$this->container->config['auth']['cookie']['name']]);
 			setcookie(
-				$this->container->get('config')['auth']['cookie']['name'],
+				$this->container->config['auth']['cookie']['name'],
 				'',
 				time() - 3600,
 				'/',
-				$this->container->get('config')['auth']['cookie']['domain'],
-				$this->container->get('config')['auth']['cookie']['secure'],
-				$this->container->get('config')['auth']['cookie']['httponly']
+				$this->container->config['auth']['cookie']['domain'],
+				$this->container->config['auth']['cookie']['secure'],
+				$this->container->config['auth']['cookie']['httponly']
 			);
 		}
 	}
