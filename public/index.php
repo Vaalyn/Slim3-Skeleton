@@ -11,7 +11,6 @@
 	$container['auth']                   = new \Service\Auth\Auth($container);
 	$container['database']               = EloquentFactory::create($container->config['database']);
 	$container['errorHandler']           = new ErrorHandler();
-	$container['flash']                  = new \Slim\Flash\Messages();
 	$container['phpErrorHandler']        = new ErrorHandler();
 	$container['renderer']               = new PhpRenderer('../template');
 
