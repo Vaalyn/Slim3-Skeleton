@@ -1,6 +1,4 @@
 <?php
-	session_start();
-
 	require '../vendor/autoload.php';
 
 	use Service\ErrorHandler\ErrorHandler;
@@ -18,6 +16,7 @@
 	$container['renderer']               = new PhpRenderer('../template');
 
 	$app->add(new RKA\Middleware\IpAddress(false, []));
+	$app->add(new Middleware\Session\SessionMiddleware($container));
 	$app->add(new Middleware\Auth\AuthMiddleware($container));
 
 	require_once '../config/routes.php';
