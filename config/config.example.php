@@ -5,6 +5,9 @@
 			'displayErrorDetails' => false
 		),
 		'config' => array(
+			'session' => array(
+				'name' => 'SLIM3_SKELETON_SESSID'
+			),
 			'database' => array(
 				'driver'    => '',
 				'host' 	    => '',
