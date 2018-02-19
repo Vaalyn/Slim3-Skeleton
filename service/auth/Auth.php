@@ -6,6 +6,7 @@
 	use Model\User;
 	use Psr\Container\ContainerInterface;
 	use Ramsey\Uuid\Uuid;
+	use WhichBrowser\Parser;
 
 	class Auth implements AuthInterface {
 		/**
@@ -24,22 +25,22 @@
 		 * @return null|\Model\User
 		 */
 		public function user(): User {
-			return $user = User::where('user_id', '=', $_SESSION['user_id'])->first();
+			return $user = User::where('user_id', '=', $this->container->session->get('user_id'))->first();
 		}
 
 		/**
 		 * @return bool
 		 */
 		public function check(): bool {
-			if (!isset($_SESSION['user_id'])) {
+			if (!$this->container->session->exists('user_id')) {
 				$this->checkLoginCookie();
 			}
 
-			if (!User::where('user_id', '=', $_SESSION['user_id'])->exists()) {
+			if (!User::where('user_id', '=', $this->container->session->get('user_id'))->exists()) {
 				$this->logout();
 			}
 
-			return isset($_SESSION['user_id']);
+			return $this->container->session->exists('user_id');
 		}
 
 		/**
@@ -68,7 +69,7 @@
 			}
 
 			if (password_verify($password, $user->password)) {
-				$_SESSION['user_id'] = $user->user_id;
+				$this->container->session->set('user_id', $user->user_id);
 
 				if ($rememberMe) {
 					$this->setLoginCookie($user);
@@ -108,13 +109,26 @@
 		private function generateLoginCookieToken(User $user): string {
 			$token = bin2hex(random_bytes(16));
 
+			$browserParser = new Parser(getallheaders());
+
+			$browser = sprintf(
+				"Browser: %s\nVersion: %s\nOS: %s\nVersion: %s\nGerät: %s - %s\n",
+				$browserParser->browser->name,
+				$browserParser->browser->version->value,
+				$browserParser->os->alias,
+				$browserParser->os->version->nickname,
+				$browserParser->device->manufacturer,
+				$browserParser->device->model
+			);
+
 			$authToken                = new AuthToken();
 			$authToken->auth_token_id = Uuid::uuid4()->toString();
 			$authToken->user_id       = $user->user_id;
 			$authToken->token         = password_hash($token, PASSWORD_DEFAULT);
+			$authToken->browser       = $browser;
 			$authToken->save();
 
-			$_SESSION['auth_token_id'] = $authToken->auth_token_id;
+			$this->container->session->set('auth_token_id', $authToken->auth_token_id);
 
 			return $token;
 		}
@@ -154,8 +168,9 @@
 
 				foreach ($authTokens as $authToken) {
 					if (password_verify($cookie->token, $authToken->token)) {
-						$_SESSION['user_id'] = $authToken->user->user_id;
-						$_SESSION['auth_token_id'] = $authToken->auth_token_id;
+						$this->container->session
+							->set('user_id', $authToken->user->user_id)
+							->set('auth_token_id', $authToken->auth_token_id);
 
 						break;
 					}
@@ -167,8 +182,6 @@
 		 * @return void
 		 */
 		public function logout(): void {
-			unset($_SESSION['user_id']);
-			unset($_SESSION['auth_token_id']);
 			unset($_COOKIE[$this->container->config['auth']['cookie']['name']]);
 			setcookie(
 				$this->container->config['auth']['cookie']['name'],
@@ -179,6 +192,8 @@
 				$this->container->config['auth']['cookie']['secure'],
 				$this->container->config['auth']['cookie']['httponly']
 			);
+
+			$this->container->session->destroy();
 		}
 	}
 ?>

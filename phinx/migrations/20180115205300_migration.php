@@ -29,6 +29,7 @@ class Migration extends AbstractMigration {
 			->addColumn('auth_token_id', 'uuid',     [])
 			->addColumn('user_id',       'integer',  ['null' => false])
 			->addColumn('token',         'string',   ['limit' => 255, 'null' => false])
+			->addColumn('browser',       'text',     ['null' => false])
 			->addColumn('created_at',    'datetime', ['null' => false])
 			->addColumn('updated_at',    'datetime', ['null' => false])
 			->addColumn('deleted_at',    'datetime', ['default' => null, 'null' => true])

@@ -26,8 +26,8 @@
 		 * @return Response
 		 */
 		public function __invoke(Request $request, Response $response, callable $next): Response {
-			session_name($this->container->config['session']['name']);
-			session_start();
+			$this->container['session'] = new \Service\Session\Session($this->container->config['session']);
+			$this->container['session']->start();
 
 			$this->container['flash'] = new \Slim\Flash\Messages();
 

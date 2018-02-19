@@ -6,7 +6,12 @@
 		),
 		'config' => array(
 			'session' => array(
-				'name' => 'SLIM3_SKELETON_SESSID'
+				'name'     => 'SLIM3_SKELETON_SESSID',
+				'lifetime' => 1200,
+				'path'     => '/',
+				'domain'   => 'localhost',
+				'secure'   => false,
+				'httponly' => true
 			),
 			'database' => array(
 				'driver'    => '',
