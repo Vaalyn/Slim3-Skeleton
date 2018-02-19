@@ -4,6 +4,7 @@
 	use Psr\Container\ContainerInterface;
 	use Slim\Http\Request;
 	use Slim\Http\Response;
+	use Service\Session\Session;
 
 	class SessionMiddleware {
 		/**
@@ -26,7 +27,7 @@
 		 * @return Response
 		 */
 		public function __invoke(Request $request, Response $response, callable $next): Response {
-			$this->container['session'] = new \Service\Session\Session($this->container->config['session']);
+			$this->container['session'] = new Session($this->container->config['session']);
 			$this->container['session']->start();
 
 			$this->container['flash'] = new \Slim\Flash\Messages();
