@@ -89,6 +89,16 @@
 			session_cache_limiter(false);
 			session_start();
 
+			setcookie(
+				session_name(),
+				session_id(),
+				time() + $this->settings['lifetime'],
+				$this->settings['path'],
+				$this->settings['domain'],
+				$this->settings['secure'],
+				$this->settings['httponly']
+			);
+
 			return $this;
 		}
 
