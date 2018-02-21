@@ -13,7 +13,7 @@
 		/**
 		 * @return null|\Model\User
 		 */
-		public function user(): User;
+		public function user(): ?User;
 
 		/**
 		 * @return bool
