@@ -24,7 +24,7 @@
 		/**
 		 * @return null|\Model\User
 		 */
-		public function user(): User {
+		public function user(): ?User {
 			return $user = User::where('user_id', '=', $this->container->session->get('user_id'))->first();
 		}
 
