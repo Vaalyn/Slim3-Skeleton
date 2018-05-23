@@ -1,7 +1,7 @@
 <?php
-	namespace Exception;
 
-	class InfoException extends \Exception {
+namespace Exception;
 
-	}
-?>
+class InfoException extends \Exception {
+
+}

@@ -1,24 +1,24 @@
 <?php
-	namespace Model;
 
-	use Illuminate\Database\Eloquent\Model;
-	use Illuminate\Database\Eloquent\Relations\BelongsTo;
-	use Illuminate\Database\Eloquent\SoftDeletes;
+namespace Model;
 
-	class AuthToken extends Model {
-		use SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-		protected $table      = 'auth_token';
-		protected $primaryKey = 'auth_token_id';
-		protected $dates      = ['created_at', 'updated_at', 'deleted_at'];
+class AuthToken extends Model {
+	use SoftDeletes;
 
-		public $incrementing = false;
+	protected $table      = 'auth_token';
+	protected $primaryKey = 'auth_token_id';
+	protected $dates      = ['created_at', 'updated_at', 'deleted_at'];
 
-		/**
-		 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-		 */
-		public function user(): BelongsTo {
-			return $this->belongsTo(User::class, 'user_id');
-		}
+	public $incrementing = false;
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function user(): BelongsTo {
+		return $this->belongsTo(User::class, 'user_id');
 	}
-?>
+}

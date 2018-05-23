@@ -1,11 +1,11 @@
 <?php
-	namespace Model\Manager;
 
-	use Model;
+namespace Model\Manager;
 
-	class UserModelManager {
+use Model;
 
-		public function __construct() {
-		}
+class UserModelManager {
+
+	public function __construct() {
 	}
-?>
+}

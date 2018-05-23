@@ -1,38 +1,38 @@
 <?php
-	namespace Middleware\Session;
 
-	use Psr\Container\ContainerInterface;
-	use Slim\Http\Request;
-	use Slim\Http\Response;
-	use Service\Session\Session;
+namespace Middleware\Session;
 
-	class SessionMiddleware {
-		/**
-		 * @var \Psr\Container\ContainerInterface
-		 */
-		private $container;
+use Psr\Container\ContainerInterface;
+use Slim\Http\Request;
+use Slim\Http\Response;
+use Service\Session\Session;
 
-		/**
-		 * @param \Psr\Container\ContainerInterface $container
-		 */
-		public function __construct(ContainerInterface $container) {
-	        $this->container = $container;
-	    }
+class SessionMiddleware {
+	/**
+	 * @var \Psr\Container\ContainerInterface
+	 */
+	private $container;
 
-		/**
-		 * @param \Slim\Http\Request  $request
-		 * @param \Slim\Http\Response $response
-		 * @param callable $next
-		 *
-		 * @return Response
-		 */
-		public function __invoke(Request $request, Response $response, callable $next): Response {
-			$this->container['session'] = new Session($this->container->config['session']);
-			$this->container['session']->start();
+	/**
+	 * @param \Psr\Container\ContainerInterface $container
+	 */
+	public function __construct(ContainerInterface $container) {
+        $this->container = $container;
+    }
 
-			$this->container['flash'] = new \Slim\Flash\Messages();
+	/**
+	 * @param \Slim\Http\Request  $request
+	 * @param \Slim\Http\Response $response
+	 * @param callable $next
+	 *
+	 * @return Response
+	 */
+	public function __invoke(Request $request, Response $response, callable $next): Response {
+		$this->container['session'] = new Session($this->container->config['session']);
+		$this->container['session']->start();
 
-			return $next($request, $response);
-		}
+		$this->container['flash'] = new \Slim\Flash\Messages();
+
+		return $next($request, $response);
 	}
-?>
+}
