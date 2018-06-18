@@ -128,7 +128,7 @@ class Auth implements AuthInterface {
 	 *
 	 * @return void
 	 */
-	private function setLoginCookie(User $user): void {
+	protected function setLoginCookie(User $user): void {
 		setcookie(
 			$this->container->config['auth']['cookie']['name'],
 			json_encode([
@@ -148,7 +148,7 @@ class Auth implements AuthInterface {
 	 *
 	 * @return string
 	 */
-	private function generateLoginCookieToken(User $user): string {
+	protected function generateLoginCookieToken(User $user): string {
 		$token = bin2hex(random_bytes(16));
 
 		$browserParser = new Parser(getallheaders());
@@ -178,7 +178,7 @@ class Auth implements AuthInterface {
 	/**
 	 * @return void
 	 */
-	private function checkLoginCookie(): void {
+	protected function checkLoginCookie(): void {
 		$this->invalidateAuthTokens();
 
 		if (isset($_COOKIE[$this->container->config['auth']['cookie']['name']])) {

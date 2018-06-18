@@ -32,7 +32,7 @@ class ErrorHandler {
 	 *
 	 * @return \Slim\Http\Response
 	 */
-	private function createErrorResponse(Response $response, \Throwable $error): Response {
+	protected function createErrorResponse(Response $response, \Throwable $error): Response {
 		$message = 'Beim Verarbeiten der Anfrage ist ein Fehler aufgetreten.';
 
 		if ($this->container->settings['displayErrorDetails']) {
