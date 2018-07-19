@@ -1,10 +1,10 @@
 <?php
 
-namespace Service\Auth;
+namespace App\Service\Auth;
 
+use App\Model\AuthToken;
+use App\Model\User;
 use Carbon\Carbon;
-use Model\AuthToken;
-use Model\User;
 use Psr\Container\ContainerInterface;
 use Ramsey\Uuid\Uuid;
 use WhichBrowser\Parser;
@@ -23,7 +23,7 @@ class Auth implements AuthInterface {
 	}
 
 	/**
-	 * @return null|\Model\User
+	 * @return null|\App\Model\User
 	 */
 	public function user(): ?User {
 		return User::where('user_id', '=', $this->container->session->get('user_id'))->first();
@@ -97,7 +97,7 @@ class Auth implements AuthInterface {
 	}
 
 	/**
-	 * @param \Model\AuthToken $authToken
+	 * @param \App\Model\AuthToken $authToken
 	 *
 	 * @return void
 	 */
@@ -124,7 +124,7 @@ class Auth implements AuthInterface {
 	}
 
 	/**
-	 * @param \Model\User $user
+	 * @param \App\Model\User $user
 	 *
 	 * @return void
 	 */
@@ -144,7 +144,7 @@ class Auth implements AuthInterface {
 	}
 
 	/**
-	 * @param \Model\User $user
+	 * @param \App\Model\User $user
 	 *
 	 * @return string
 	 */

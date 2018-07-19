@@ -1,11 +1,11 @@
 <?php
 
-namespace Middleware\Session;
+namespace App\Middleware\Session;
 
+use App\Service\Session\Session;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Service\Session\Session;
 
 class SessionMiddleware {
 	/**

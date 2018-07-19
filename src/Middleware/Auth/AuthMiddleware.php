@@ -1,6 +1,6 @@
 <?php
 
-namespace Middleware\Auth;
+namespace App\Middleware\Auth;
 
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;

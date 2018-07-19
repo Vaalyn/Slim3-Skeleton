@@ -1,8 +1,8 @@
 <?php
 
-namespace Model\Manager;
+namespace App\Model\Manager;
 
-use Model;
+use App\Model;
 
 class UserModelManager {
 

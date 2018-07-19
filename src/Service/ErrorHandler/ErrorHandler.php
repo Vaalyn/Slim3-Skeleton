@@ -1,6 +1,6 @@
 <?php
 
-namespace Service\ErrorHandler;
+namespace App\Service\ErrorHandler;
 
 use Closure;
 use Psr\Container\ContainerInterface;

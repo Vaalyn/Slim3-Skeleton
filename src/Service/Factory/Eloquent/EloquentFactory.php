@@ -1,6 +1,6 @@
 <?php
 
-namespace Service\Factory\Eloquent;
+namespace App\Service\Factory\Eloquent;
 
 use Illuminate\Database\Capsule\Manager;
 

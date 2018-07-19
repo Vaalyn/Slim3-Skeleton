@@ -1,6 +1,6 @@
 <?php
 
-namespace Routes\Api;
+namespace App\Routes\Api;
 
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;

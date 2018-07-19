@@ -1,7 +1,7 @@
 <?php
 
-use Routes\Api;
-use Routes\Frontend;
+use App\Routes\Api;
+use App\Routes\Frontend;
 
 $app->group('/api', function() {
 	$this->get('/ping', Api\PingController::class)->setName('api.ping');

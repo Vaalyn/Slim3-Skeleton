@@ -1,6 +1,6 @@
 <?php
 
-namespace Exception;
+namespace App\Exception;
 
 class InfoException extends \Exception {
 

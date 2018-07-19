@@ -1,6 +1,6 @@
 <?php
 
-namespace Routes\Frontend;
+namespace App\Routes\Frontend;
 
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;

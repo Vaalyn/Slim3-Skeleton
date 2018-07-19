@@ -1,8 +1,8 @@
 <?php
 
-namespace Service\Auth;
+namespace App\Service\Auth;
 
-use Model\User;
+use App\Model\User;
 use Psr\Container\ContainerInterface;
 
 interface AuthInterface {
@@ -12,7 +12,7 @@ interface AuthInterface {
 	public function __construct(ContainerInterface $container);
 
 	/**
-	 * @return null|\Model\User
+	 * @return null|\App\Model\User
 	 */
 	public function user(): ?User;
 
