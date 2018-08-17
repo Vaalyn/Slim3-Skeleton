@@ -28,11 +28,15 @@ $container['notFoundHandler']        = new NotFoundHandler();
 $container['phpErrorHandler']        = new ErrorHandler();
 $container['renderer']               = new PhpRenderer('../template');
 
+if (file_exists(__DIR__ . '/../config/custom/middleware.php')) {
+	require_once __DIR__ . '/../config/custom/middleware.php';
+}
+
 $app->add(new MenuMiddleware($container));
 $app->add(new AuthorizationMiddleware($container));
 $app->add(new AuthenticationMiddleware($container));
 $app->add(new RKA\Middleware\IpAddress(false, []));
 
-require_once '../config/routes.php';
+require_once __DIR__ . '/../config/routes.php';
 
 $app->run();
