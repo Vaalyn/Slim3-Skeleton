@@ -1,20 +1,21 @@
 <div class="navbar-fixed">
 	<nav class="blue-grey darken-2">
 		<div class="nav-wrapper container">
-			<ul class="right">
-				<li>
-					<a href="dashboard">Dashboard</a>
-				</li>
-				<?php if (!$auth->check()) : ?>
-					<li>
-						<a href="login">Login</a>
-					</li>
-				<?php else : ?>
-					<li>
-						<a href="logout">Logout</a>
-					</li>
+			<a href="#" data-activates="side-nav" class="button-collapse">
+				<i class="material-icons">menu</i>
+			</a>
+
+			<?php $menus = $request->getAttribute('menus'); ?>
+
+			<?php foreach ($menus as $menu) : ?>
+				<?php if (in_array($menu->getName(), ['navbar_pages', 'navbar_system_pages'])) : ?>
+					<?php require __DIR__ . '/menu.php' ?>
 				<?php endif; ?>
-			</ul>
+
+				<?php if ($menu->getName() === 'navbar_pages') : ?>
+					<?php require __DIR__ . '/sidenav.php'; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
 		</div>
-	</nav>
+	</div>
 </div>

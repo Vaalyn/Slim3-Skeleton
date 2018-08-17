@@ -27,7 +27,7 @@ class LogoutController {
 	 * @return \Slim\Http\Response
 	 */
 	public function __invoke(Request $request, Response $response, array $args): Response {
-		$this->container->auth->logout();
+		$this->container->authentication->logout();
 		return $response->withRedirect($this->container->router->pathFor('login'));
 	}
 }

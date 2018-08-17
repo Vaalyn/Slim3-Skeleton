@@ -1,51 +1,71 @@
 <?php
 
-namespace App\Service\Auth;
+namespace App\Service\Authentication;
 
+use Carbon\Carbon;
 use App\Model\AuthToken;
 use App\Model\User;
-use Carbon\Carbon;
+use App\Service\Authorization\AuthorizationInterface;
+use App\Service\Session\Session;
 use Psr\Container\ContainerInterface;
 use Ramsey\Uuid\Uuid;
 use WhichBrowser\Parser;
 
-class Auth implements AuthInterface {
+class Authentication implements AuthenticationInterface {
 	/**
-	 * @var \Psr\Container\ContainerInterface
+	 * @var Session
 	 */
-	private $container;
+	protected $session;
 
 	/**
-	 * @param \Psr\Container\ContainerInterface $container
+	 * @var AuthorizationInterface
+	 */
+	protected $authorization;
+
+	/**
+	 * @var array
+	 */
+	protected $cookieConfig;
+
+	/**
+	 * @var string[]
+	 */
+	protected $routesWithAuthentication;
+
+	/**
+	 * @param ContainerInterface $container
 	 */
 	public function __construct(ContainerInterface $container) {
-		$this->container = $container;
+		$this->session                  = $container->session;
+		$this->authorization            = $container->authorization;
+		$this->cookieConfig             = $container->config['authentication']['cookie'];
+		$this->routesWithAuthentication = $container->config['authentication']['routes'];
 	}
 
 	/**
-	 * @return null|\App\Model\User
+	 * @inheritDoc
 	 */
 	public function user(): ?User {
-		return User::where('user_id', '=', $this->container->session->get('user_id'))->first();
+		return User::find($this->session->get('user_id'));
 	}
 
 	/**
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function check(): bool {
-		if (!$this->container->session->exists('user_id')) {
+		if (!$this->session->exists('user_id')) {
 			$this->checkLoginCookie();
 		}
 
-		if (!User::where('user_id', '=', $this->container->session->get('user_id'))->exists()) {
+		if (!User::where('user_id', '=', $this->session->get('user_id'))->exists()) {
 			$this->logout();
 		}
 
-		return $this->container->session->exists('user_id');
+		return $this->session->exists('user_id');
 	}
 
 	/**
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function isAdmin(): bool {
 		if ($this->user()->is_admin === 1) {
@@ -56,11 +76,7 @@ class Auth implements AuthInterface {
 	}
 
 	/**
-	 * @param string $username
-	 * @param string $password
-	 * @param bool $rememberMe
-	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function attempt(string $username, string $password, bool $rememberMe = false): bool {
 		$user = User::where('username', '=', $username)->first();
@@ -70,7 +86,7 @@ class Auth implements AuthInterface {
 		}
 
 		if (password_verify($password, $user->password)) {
-			$this->container->session->set('user_id', $user->user_id);
+			$this->session->set('user_id', $user->user_id);
 
 			if ($rememberMe) {
 				$this->setLoginCookie($user);
@@ -83,11 +99,11 @@ class Auth implements AuthInterface {
 	}
 
 	/**
-	 * @return void
+	 * @inheritDoc
 	 */
 	public function invalidateAuthTokens(): void {
 		$invalidationDateTime = new Carbon();
-		$invalidationDateTime->subSeconds($this->container->config['auth']['cookie']['expire']);
+		$invalidationDateTime->subSeconds($this->cookieConfig['expire']);
 
 		$authTokens = AuthToken::where('created_at', '<', $invalidationDateTime->toDateTimeString())->get();
 
@@ -97,54 +113,65 @@ class Auth implements AuthInterface {
 	}
 
 	/**
-	 * @param \App\Model\AuthToken $authToken
-	 *
-	 * @return void
+	 * @inheritDoc
 	 */
 	public function invalidateAuthToken(AuthToken $authToken): void {
 		$authToken->delete();
 	}
 
 	/**
-	 * @return void
+	 * @inheritDoc
 	 */
 	public function logout(): void {
-		unset($_COOKIE[$this->container->config['auth']['cookie']['name']]);
+		unset($_COOKIE[$this->cookieConfig['name']]);
 		setcookie(
-			$this->container->config['auth']['cookie']['name'],
+			$this->cookieConfig['name'],
 			'',
 			time() - 3600,
 			'/',
-			$this->container->config['auth']['cookie']['domain'],
-			$this->container->config['auth']['cookie']['secure'],
-			$this->container->config['auth']['cookie']['httponly']
+			$this->cookieConfig['domain'],
+			$this->cookieConfig['secure'],
+			$this->cookieConfig['httponly']
 		);
 
-		$this->container->session->destroy();
+		$this->session->destroy();
 	}
 
 	/**
-	 * @param \App\Model\User $user
+	 * @inheritDoc
+	 */
+	public function routeNeedsAuthentication(string $routeName): bool {
+		$needsAuthentication = in_array($routeName, $this->routesWithAuthentication);
+
+		if ($needsAuthentication) {
+			return true;
+		}
+
+		return $this->authorization->needsAuthorizationForRoute($routeName);
+	}
+
+	/**
+	 * @param User $user
 	 *
 	 * @return void
 	 */
 	protected function setLoginCookie(User $user): void {
 		setcookie(
-			$this->container->config['auth']['cookie']['name'],
+			$this->cookieConfig['name'],
 			json_encode([
 				'username' => $user->username,
 				'token' => $this->generateLoginCookieToken($user)
 			]),
-			time() + $this->container->config['auth']['cookie']['expire'],
+			time() + $this->cookieConfig['expire'],
 			'/',
-			$this->container->config['auth']['cookie']['domain'],
-			$this->container->config['auth']['cookie']['secure'],
-			$this->container->config['auth']['cookie']['httponly']
+			$this->cookieConfig['domain'],
+			$this->cookieConfig['secure'],
+			$this->cookieConfig['httponly']
 		);
 	}
 
 	/**
-	 * @param \App\Model\User $user
+	 * @param User $user
 	 *
 	 * @return string
 	 */
@@ -155,12 +182,12 @@ class Auth implements AuthInterface {
 
 		$browser = sprintf(
 			"Browser: %s\nVersion: %s\nOS: %s\nVersion: %s\nGerät: %s - %s\n",
-			$browserParser->browser->name,
-			$browserParser->browser->version->value,
-			$browserParser->os->alias,
-			$browserParser->os->version->nickname,
-			$browserParser->device->manufacturer,
-			$browserParser->device->model
+			$browserParser->browser->name ?? '',
+			$browserParser->browser->version->value ?? '',
+			$browserParser->os->alias ?? '',
+			$browserParser->os->version->nickname ?? '',
+			$browserParser->device->manufacturer ?? '',
+			$browserParser->device->model ?? ''
 		);
 
 		$authToken                = new AuthToken();
@@ -170,7 +197,7 @@ class Auth implements AuthInterface {
 		$authToken->browser       = $browser;
 		$authToken->save();
 
-		$this->container->session->set('auth_token_id', $authToken->auth_token_id);
+		$this->session->set('auth_token_id', $authToken->auth_token_id);
 
 		return $token;
 	}
@@ -181,13 +208,13 @@ class Auth implements AuthInterface {
 	protected function checkLoginCookie(): void {
 		$this->invalidateAuthTokens();
 
-		if (isset($_COOKIE[$this->container->config['auth']['cookie']['name']])) {
-			$cookie     = json_decode($_COOKIE[$this->container->config['auth']['cookie']['name']]);
+		if (isset($_COOKIE[$this->cookieConfig['name']])) {
+			$cookie     = json_decode($_COOKIE[$this->cookieConfig['name']]);
 			$authTokens = User::where('username', '=', $cookie->username)->first()->authTokens;
 
 			foreach ($authTokens as $authToken) {
 				if (password_verify($cookie->token, $authToken->token)) {
-					$this->container->session
+					$this->session
 						->set('user_id', $authToken->user->user_id)
 						->set('auth_token_id', $authToken->auth_token_id);
 

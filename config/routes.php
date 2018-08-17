@@ -10,6 +10,6 @@ $app->group('/api', function() {
 $app->get('/dashboard', Frontend\DashboardController::class)->setName('dashboard');
 
 $app->get('/login', Frontend\LoginController::class . ':getLoginAction')->setName('login');
-$app->post('/login', Frontend\LoginController::class . ':loginAction')->setName('post.login');
+$app->post('/login', Frontend\LoginController::class . ':loginAction')->setName('login.action');
 
 $app->get('/logout', Frontend\LogoutController::class)->setName('logout');

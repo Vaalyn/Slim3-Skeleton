@@ -28,11 +28,9 @@ class DashboardController {
 	 */
 	public function __invoke(Request $request, Response $response, array $args): Response {
 		return $this->container->renderer->render($response, '/dashboard/dashboard.php', [
-			'request' => $request,
-			'response' => $response,
-			'database' => $this->container->database,
-			'auth' => $this->container->auth,
-			'flashMessages' => $this->container->flash->getMessages()
+			'authentication' => $this->container->authentication,
+			'flashMessages' => $this->container->flash->getMessages(),
+			'request' => $request
 		]);
 	}
 }

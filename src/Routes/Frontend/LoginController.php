@@ -27,7 +27,7 @@ class LoginController {
 	 * @return \Slim\Http\Response
 	 */
 	public function getLoginAction(Request $request, Response $response, array $args): Response {
-		if ($this->container->auth->check()) {
+		if ($this->container->authentication->check()) {
 			if (count($request->getHeader('HTTP_REFERER'))) {
 				return $response->withRedirect($request->getHeader('HTTP_REFERER')[0]);
 			}
@@ -36,11 +36,9 @@ class LoginController {
 		}
 
 		return $this->container->renderer->render($response, '/login/login.php', [
-			'request' => $request,
-			'response' => $response,
-			'database' => $this->container->database,
-			'auth' => $this->container->auth,
-			'flashMessages' => $this->container->flash->getMessages()
+			'authentication' => $this->container->authentication,
+			'flashMessages' => $this->container->flash->getMessages(),
+			'request' => $request
 		]);
 	}
 
@@ -57,7 +55,7 @@ class LoginController {
 		$referer = $request->getParsedBody()['referer'] ?? null;
 		$rememberMe = isset($request->getParsedBody()['remember_me']) ? true : false;
 
-		if (!$this->container->auth->attempt($username, $password, $rememberMe)) {
+		if (!$this->container->authentication->attempt($username, $password, $rememberMe)) {
 			$this->container->flash->addMessage('Login error', 'Username or password incorrect');
 			return $response->withRedirect($this->container->router->pathFor('login'));
 		}

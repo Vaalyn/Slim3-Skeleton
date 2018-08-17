@@ -25,7 +25,7 @@ return [
 			'prefix'    => '',
 			'port'      => 3306
 		],
-		'auth' => [
+		'authentication' => [
 			'cookie' => [
 				'name'     => 'remember',
 				'expire'   => 2592000,
@@ -33,8 +33,13 @@ return [
 				'secure'   => false,
 				'httponly' => true
 			],
-			'routes' => require_once __DIR__ . '/routePermissions.php',
-			'local' => []
-		]
+			'routes' => require_once __DIR__ . '/routes/authenticated.php',
+			'local' => require_once __DIR__ . '/routes/local.php'
+		],
+		'authorization' => [
+			'routes' => require_once __DIR__ . '/routes/authorized.php',
+			'authorizers' => require_once __DIR__ . '/authorizers.php'
+		],
+		'navigation' => require_once __DIR__ . '/navigation.php',
 	]
 ];

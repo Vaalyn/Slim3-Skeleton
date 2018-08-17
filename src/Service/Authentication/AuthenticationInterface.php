@@ -1,18 +1,13 @@
 <?php
 
-namespace App\Service\Auth;
+namespace App\Service\Authentication;
 
+use App\Model\AuthToken;
 use App\Model\User;
-use Psr\Container\ContainerInterface;
 
-interface AuthInterface {
+interface AuthenticationInterface {
 	/**
-	 * @param \Psr\Container\ContainerInterface $container
-	 */
-	public function __construct(ContainerInterface $container);
-
-	/**
-	 * @return null|\App\Model\User
+	 * @return null|User
 	 */
 	public function user(): ?User;
 
@@ -38,5 +33,24 @@ interface AuthInterface {
 	/**
 	 * @return void
 	 */
+	public function invalidateAuthTokens(): void;
+
+	/**
+	 * @param AuthToken $authToken
+	 *
+	 * @return void
+	 */
+	public function invalidateAuthToken(AuthToken $authToken): void;
+
+	/**
+	 * @return void
+	 */
 	public function logout(): void;
+
+	/**
+	 * @param string $routeName
+	 *
+	 * @return bool
+	 */
+	public function routeNeedsAuthentication(string $routeName): bool;
 }
