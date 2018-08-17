@@ -26,7 +26,7 @@ $container['flash']                  = new \Slim\Flash\Messages();
 $container['menuBuilder']            = new MenuBuilder($container->router, $container->authentication, $container->authorization);
 $container['notFoundHandler']        = new NotFoundHandler();
 $container['phpErrorHandler']        = new ErrorHandler();
-$container['renderer']               = new PhpRenderer('../template');
+$container['renderer']               = new PhpRenderer($container->config['template']['path']);
 
 if (file_exists(__DIR__ . '/../config/custom/middleware.php')) {
 	require_once __DIR__ . '/../config/custom/middleware.php';
@@ -38,5 +38,9 @@ $app->add(new AuthenticationMiddleware($container));
 $app->add(new RKA\Middleware\IpAddress(false, []));
 
 require_once __DIR__ . '/../config/routes.php';
+
+if (file_exists(__DIR__ . '/../config/custom/routes.php')) {
+	require_once __DIR__ . '/../config/custom/routes.php';
+}
 
 $app->run();

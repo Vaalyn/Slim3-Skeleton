@@ -41,5 +41,8 @@ return [
 			'authorizers' => require_once __DIR__ . '/authorizers.php'
 		],
 		'navigation' => require_once __DIR__ . '/navigation.php',
+		'template' => [
+			'path' => __DIR__ . '/../template'
+		]
 	]
 ];
