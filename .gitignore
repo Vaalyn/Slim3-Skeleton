@@ -1,3 +1,5 @@
 /config/config.php
-
+/config/custom/middleware.php
+/custom/*
+!/custom/.gitkeep
 /vendor/*
