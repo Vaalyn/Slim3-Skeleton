@@ -33,6 +33,9 @@ return [
 				'secure'   => false,
 				'httponly' => true
 			],
+			'host' => [
+				'ip' => '127.0.0.1'
+			],
 			'routes' => require_once __DIR__ . '/routes/authenticated.php',
 			'local' => require_once __DIR__ . '/routes/local.php'
 		],

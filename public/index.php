@@ -11,12 +11,24 @@ use App\Service\ErrorHandler\ErrorHandler;
 use App\Service\Factory\Eloquent\EloquentFactory;
 use App\Service\MenuBuilder\MenuBuilder;
 use App\Service\NotFoundHandler\NotFoundHandler;
+use App\Service\Plugin\PluginLoader;
 use App\Service\Session\Session;
 use Slim\Views\PhpRenderer;
 
-$app = new \Slim\App(require_once __DIR__ . '/../config/config.php');
+$app          = new \Slim\App(require_once __DIR__ . '/../config/config.php');
+$container    = $app->getContainer();
+$pluginLoader = new PluginLoader();
 
-$container                           = $app->getContainer();
+if (file_exists(__DIR__ . '/../config/plugins.php')) {
+	$plugins = require_once __DIR__ . '/../config/plugins.php';
+
+	foreach ($plugins as $plugin) {
+		$pluginLoader->registerPlugin(new $plugin);
+	}
+}
+
+$pluginLoader->loadPlugins($container);
+
 $container['session']                = (new Session($container->config['session']))->start();
 $container['authorization']          = new Authorization($container);
 $container['authentication']         = new Authentication($container);
@@ -28,9 +40,7 @@ $container['notFoundHandler']        = new NotFoundHandler();
 $container['phpErrorHandler']        = new ErrorHandler();
 $container['renderer']               = new PhpRenderer($container->config['template']['path']);
 
-if (file_exists(__DIR__ . '/../config/custom/middleware.php')) {
-	require_once __DIR__ . '/../config/custom/middleware.php';
-}
+$pluginLoader->registerPluginMiddlewares($app, $container);
 
 $app->add(new MenuMiddleware($container));
 $app->add(new AuthorizationMiddleware($container));
@@ -39,8 +49,6 @@ $app->add(new RKA\Middleware\IpAddress(false, []));
 
 require_once __DIR__ . '/../config/routes.php';
 
-if (file_exists(__DIR__ . '/../config/custom/routes.php')) {
-	require_once __DIR__ . '/../config/custom/routes.php';
-}
+$pluginLoader->registerPluginRoutes($app, $container);
 
 $app->run();
