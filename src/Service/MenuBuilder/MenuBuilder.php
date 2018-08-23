@@ -86,7 +86,7 @@ class MenuBuilder implements MenuBuilderInterface {
 
 		$menuItem = $this->resolveRouteNameToUrl($menuItem);
 
-		$menuItemConfigs = $menuItemConfig[MenuBuilderConstants::MENU_ITEM_CONFIG_KEY_MENU_ITEMS];
+		$menuItemConfigs = $menuItemConfig[MenuBuilderConstants::MENU_ITEM_CONFIG_KEY_MENU_ITEMS] ?? [];
 
 		foreach ($menuItemConfigs as $subMenuItemName => $subMenuItemConfig) {
 			$subMenuItem = $this->buildMenuItemFromConfig($subMenuItemName, $subMenuItemConfig);
