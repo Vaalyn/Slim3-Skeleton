@@ -44,3 +44,15 @@ h3.card-title {
 h3.card-title + .divider {
 	margin-bottom: 15px;
 }
+
+#sidenav-overlay {
+	z-index: 990;
+}
+
+.side-nav > li {
+	position: relative;
+}
+
+.side-nav .dropdown-content {
+	width: 100% !important;
+}

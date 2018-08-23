@@ -13,7 +13,7 @@
 				<?php endif; ?>
 
 				<?php if ($menu->getName() === 'navbar_pages') : ?>
-					<?php require __DIR__ . '/sidenav.php'; ?>
+					<?php require __DIR__ . '/side-nav.php'; ?>
 				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>

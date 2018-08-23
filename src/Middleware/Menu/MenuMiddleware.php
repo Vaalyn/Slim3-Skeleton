@@ -18,14 +18,14 @@ class MenuMiddleware {
 	/**
 	 * @var array
 	 */
-	protected $navigationConfig;
+	protected $menuConfigs;
 
 	/**
 	 * @param ContainerInterface $container
 	 */
 	public function __construct(ContainerInterface $container) {
-        $this->menuBuilder      = $container->menuBuilder;
-		$this->navigationConfig = $container->config['navigation'];
+        $this->menuBuilder = $container->menuBuilder;
+		$this->menuConfigs = $container->config['menu'];
     }
 
 	/**
@@ -38,7 +38,7 @@ class MenuMiddleware {
 	public function __invoke(Request $request, Response $response, callable $next): Response {
 		$menus = [];
 
-		foreach ($this->navigationConfig as $menuName => $menuConfig) {
+		foreach ($this->menuConfigs as $menuName => $menuConfig) {
 			$menu = $this->menuBuilder->buildMenufromConfig($menuName, $menuConfig);
 			$menus[$menu->getName()] = $menu;
 		}

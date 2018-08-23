@@ -40,7 +40,7 @@ return [
 			'routes' => require_once __DIR__ . '/routes/authorized.php',
 			'authorizers' => require_once __DIR__ . '/authorizers.php'
 		],
-		'navigation' => require_once __DIR__ . '/navigation.php',
+		'menu' => require_once __DIR__ . '/menu.php',
 		'template' => [
 			'path' => __DIR__ . '/../template'
 		]
