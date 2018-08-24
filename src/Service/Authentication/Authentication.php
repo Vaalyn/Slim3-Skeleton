@@ -2,14 +2,14 @@
 
 namespace App\Service\Authentication;
 
-use Carbon\Carbon;
 use App\Model\AuthToken;
 use App\Model\User;
 use App\Service\Authorization\AuthorizationInterface;
 use App\Service\Session\Session;
+use Carbon\Carbon;
+use Jenssegers\Agent\Agent;
 use Psr\Container\ContainerInterface;
 use Ramsey\Uuid\Uuid;
-use WhichBrowser\Parser;
 
 class Authentication implements AuthenticationInterface {
 	/**
@@ -178,16 +178,15 @@ class Authentication implements AuthenticationInterface {
 	protected function generateLoginCookieToken(User $user): string {
 		$token = bin2hex(random_bytes(16));
 
-		$browserParser = new Parser(getallheaders());
+		$browserParser = new Agent();
 
 		$browser = sprintf(
-			"Browser: %s\nVersion: %s\nOS: %s\nVersion: %s\nGerät: %s - %s\n",
-			$browserParser->browser->name ?? '',
-			$browserParser->browser->version->value ?? '',
-			$browserParser->os->alias ?? '',
-			$browserParser->os->version->nickname ?? '',
-			$browserParser->device->manufacturer ?? '',
-			$browserParser->device->model ?? ''
+			"Browser: %s\nVersion: %s\nOS: %s\nVersion: %s\nGerät: %s\n",
+			$browserParser->browser() ?? '',
+			$browserParser->version($browserParser->browser()) ?? '',
+			$browserParser->platform() ?? '',
+			$browserParser->version($browserParser->platform()) ?? '',
+			$browserParser->device() ?? ''
 		);
 
 		$authToken                = new AuthToken();
