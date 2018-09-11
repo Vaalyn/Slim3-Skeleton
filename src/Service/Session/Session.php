@@ -28,7 +28,7 @@ class Session {
 	 * @param string $key
 	 * @param mixed $value
 	 *
-	 * @return \App\Service\Session\Session
+	 * @return Session
 	 */
 	public function set(string $key, $value): Session {
 		$_SESSION[$key] = $value;
@@ -39,7 +39,7 @@ class Session {
 	/**
 	 * @param string $key
 	 *
-	 * @return \App\Service\Session\Session
+	 * @return Session
 	 */
 	public function delete(string $key): Session {
 		if ($this->exists($key)) {
@@ -50,7 +50,7 @@ class Session {
 	}
 
 	/**
-	 * @return \App\Service\Session\Session
+	 * @return Session
 	 */
 	public function clear(): Session {
 		$_SESSION = [];
@@ -75,7 +75,7 @@ class Session {
 	}
 
 	/**
-	 * @return \App\Service\Session\Session
+	 * @return Session
 	 */
 	public function start(): Session {
 		session_set_cookie_params(

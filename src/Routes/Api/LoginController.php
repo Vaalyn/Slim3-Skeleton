@@ -2,36 +2,37 @@
 
 namespace App\Routes\Api;
 
+use App\Service\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 class LoginController {
 	/**
-	 * @var \Psr\Container\ContainerInterface
+	 * @var AuthenticationInterface
 	 */
-	protected $container;
+	protected $authentication;
 
 	/**
-	 * @param \Psr\Container\ContainerInterface $container
+	 * @param ContainerInterface $container
 	 */
 	public function __construct(ContainerInterface $container) {
-		$this->container = $container;
+		$this->authentication = $container->authentication;
 	}
 
 	/**
-	 * @param \Slim\Http\Request $request
-	 * @param \Slim\Http\Response $response
+	 * @param Request $request
+	 * @param Response $response
 	 * @param array $args
 	 *
-	 * @return \Slim\Http\Response
+	 * @return Response
 	 */
 	public function loginAction(Request $request, Response $response, array $args): Response {
 		$username = $request->getParsedBody()['username'] ?? null;
 		$password = $request->getParsedBody()['password'] ?? null;
 		$rememberMe = true;
 
-		if (!$this->container->authentication->attempt($username, $password, $rememberMe)) {
+		if (!$this->authentication->attempt($username, $password, $rememberMe)) {
 			return $response->write(json_encode(array(
 				'status' => 'error',
 				'errors' => $exception->getMessage()

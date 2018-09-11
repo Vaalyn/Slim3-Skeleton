@@ -14,7 +14,7 @@ class User extends Model {
 	protected $dates      = ['created_at', 'updated_at', 'deleted_at'];
 
 	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * @return HasMany
 	 */
 	public function authTokens(): HasMany {
 	    return $this->hasMany(AuthToken::class, 'user_id');

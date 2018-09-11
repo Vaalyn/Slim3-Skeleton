@@ -16,7 +16,7 @@ class AuthToken extends Model {
 	public $incrementing = false;
 
 	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function user(): BelongsTo {
 		return $this->belongsTo(User::class, 'user_id');

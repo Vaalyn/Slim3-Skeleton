@@ -9,18 +9,11 @@ use Slim\Http\Response;
 
 class NotFoundHandler {
 	/**
-	 * @var ContainerInterface
-	 */
-	protected $container;
-
-	/**
 	 * @param ContainerInterface $container
 	 *
 	 * @return Closure
 	 */
 	public function __invoke(ContainerInterface $container): Closure {
-		$this->container = $container;
-
 		return function(Request $request, Response $response) {
 			return $this->createNotFoundResponse($request, $response);
 		};

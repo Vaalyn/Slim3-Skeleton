@@ -9,7 +9,21 @@ use Slim\App;
 
 interface PluginInterface {
 	/**
-	 * Initialize the plugin here
+	 * Returns the name of the plugin
+	 *
+	 * @return string
+	 */
+	public static function getPluginName(): string;
+
+	/**
+	 * Return the path to the plugin directory
+	 *
+	 * @return string
+	 */
+	public static function getPluginPath(): string;
+
+	/**
+	 * Initialize the plugin
 	 *
 	 * @param ContainerInterface $container
 	 *
@@ -18,7 +32,7 @@ interface PluginInterface {
 	public function load(ContainerInterface $container): void;
 
 	/**
-	 * Register all middlewares here
+	 * Register all middlewares
 	 *
 	 * @param App $app
 	 * @param ContainerInterface $container
@@ -28,7 +42,7 @@ interface PluginInterface {
 	public function registerMiddlewares(App $app, ContainerInterface $container): void;
 
 	/**
-	 * Register all routes here
+	 * Register all routes
 	 *
 	 * @param App $app
 	 *

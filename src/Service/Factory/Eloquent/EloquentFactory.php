@@ -9,7 +9,7 @@ class EloquentFactory {
 	 * @param array $config
 	 * @param string $name
 	 *
-	 * @return \Illuminate\Database\Capsule\Manager
+	 * @return Manager
 	 */
 	public static function create(array $config, string $name = 'default'): Manager {
 		$capsule = new Manager;
@@ -23,7 +23,7 @@ class EloquentFactory {
 	/**
 	 * @param array $config
 	 *
-	 * @return \Illuminate\Database\Capsule\Manager
+	 * @return Manager
 	 */
 	public static function createMultiple(array $config): Manager {
 		$capsule = new Manager;

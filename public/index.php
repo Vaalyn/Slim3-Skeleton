@@ -29,16 +29,16 @@ if (file_exists(__DIR__ . '/../config/plugins.php')) {
 
 $pluginLoader->loadPlugins($container);
 
-$container['session']                = (new Session($container->config['session']))->start();
-$container['authorization']          = new Authorization($container);
-$container['authentication']         = new Authentication($container);
-$container['database']               = EloquentFactory::create($container->config['database']);
-$container['errorHandler']           = new ErrorHandler();
-$container['flash']                  = new \Slim\Flash\Messages();
-$container['menuBuilder']            = new MenuBuilder($container->router, $container->authentication, $container->authorization);
-$container['notFoundHandler']        = new NotFoundHandler();
-$container['phpErrorHandler']        = new ErrorHandler();
-$container['renderer']               = new PhpRenderer($container->config['template']['path']);
+$container['session']         = (new Session($container->config['session']))->start();
+$container['authorization']   = new Authorization($container);
+$container['authentication']  = new Authentication($container);
+$container['database']        = EloquentFactory::create($container->config['database']);
+$container['errorHandler']    = new ErrorHandler();
+$container['flashMessages']   = new \Slim\Flash\Messages();
+$container['menuBuilder']     = new MenuBuilder($container->router, $container->authentication, $container->authorization);
+$container['notFoundHandler'] = new NotFoundHandler();
+$container['phpErrorHandler'] = new ErrorHandler();
+$container['renderer']        = new PhpRenderer($container->config['template']['path']);
 
 $pluginLoader->registerPluginMiddlewares($app, $container);
 

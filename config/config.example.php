@@ -32,6 +32,7 @@ return [
 			'username' 	=> ''
 		],
 		'menu' => require_once __DIR__ . '/menu.php',
+		'plugins' => [],
 		'session' => [
 			'domain'   => 'localhost',
 			'httponly' => true,

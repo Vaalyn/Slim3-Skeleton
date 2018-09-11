@@ -2,34 +2,41 @@
 
 namespace App\Routes\Frontend;
 
+use App\Service\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Views\PhpRenderer;
 
 class DashboardController {
 	/**
-	 * @var \Psr\Container\ContainerInterface
+	 * @var AuthenticationInterface
 	 */
-	protected $container;
+	protected $authentication;
 
 	/**
-	 * @param \Psr\Container\ContainerInterface $container
+	 * @var PhpRenderer
+	 */
+	protected $renderer;
+
+	/**
+	 * @param ContainerInterface $container
 	 */
 	public function __construct(ContainerInterface $container) {
-		$this->container = $container;
+		$this->authentication = $container->authentication;
+		$this->renderer       = $container->renderer;
 	}
 
 	/**
-	 * @param \Slim\Http\Request $request
-	 * @param \Slim\Http\Response $response
+	 * @param Request $request
+	 * @param Response $response
 	 * @param array $args
 	 *
-	 * @return \Slim\Http\Response
+	 * @return Response
 	 */
 	public function __invoke(Request $request, Response $response, array $args): Response {
-		return $this->container->renderer->render($response, '/dashboard/dashboard.php', [
-			'authentication' => $this->container->authentication,
-			'flashMessages' => $this->container->flash->getMessages(),
+		return $this->renderer->render($response, '/dashboard/dashboard.php', [
+			'authentication' => $this->authentication,
 			'request' => $request
 		]);
 	}
