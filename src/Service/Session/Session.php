@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Service\Session;
 
 class Session {
@@ -87,7 +89,7 @@ class Session {
 		);
 
 		session_name($this->settings['name']);
-		session_cache_limiter(false);
+		session_cache_limiter('private');
 		session_start();
 
 		setcookie(

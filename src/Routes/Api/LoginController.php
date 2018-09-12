@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Routes\Api;
 
 use App\Service\Authentication\AuthenticationInterface;
@@ -28,9 +30,9 @@ class LoginController {
 	 * @return Response
 	 */
 	public function loginAction(Request $request, Response $response, array $args): Response {
-		$username = $request->getParsedBody()['username'] ?? null;
-		$password = $request->getParsedBody()['password'] ?? null;
-		$rememberMe = true;
+		$username = $request->getParsedBody()['username'] ?? '';
+		$password = $request->getParsedBody()['password'] ?? '';
+		$rememberMe = isset($request->getParsedBody()['remember_me']) ? true : false;
 
 		if (!$this->authentication->attempt($username, $password, $rememberMe)) {
 			return $response->write(json_encode(array(

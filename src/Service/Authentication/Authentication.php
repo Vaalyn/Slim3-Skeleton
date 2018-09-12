@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Service\Authentication;
 
 use App\Model\AuthToken;
@@ -87,6 +89,11 @@ class Authentication implements AuthenticationInterface {
 
 		if (password_verify($password, $user->password)) {
 			$this->session->set('user_id', $user->user_id);
+
+			if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
+				$user->password = password_hash($password, PASSWORD_DEFAULT);
+				$user->save();
+			}
 
 			if ($rememberMe) {
 				$this->setLoginCookie($user);

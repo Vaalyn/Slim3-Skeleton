@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Routes\Frontend;
 
 use App\Service\Authentication\AuthenticationInterface;
@@ -72,8 +74,8 @@ class LoginController {
 	 * @return Response
 	 */
 	public function loginAction(Request $request, Response $response, array $args): Response {
-		$username = $request->getParsedBody()['username'] ?? null;
-		$password = $request->getParsedBody()['password'] ?? null;
+		$username = $request->getParsedBody()['username'] ?? '';
+		$password = $request->getParsedBody()['password'] ?? '';
 		$referer = $request->getParsedBody()['referer'] ?? null;
 		$rememberMe = isset($request->getParsedBody()['remember_me']) ? true : false;
 
