@@ -42,6 +42,8 @@ $container['notFoundHandler'] = new NotFoundHandler();
 $container['phpErrorHandler'] = new ErrorHandler();
 $container['renderer']        = new PhpRenderer($container->config['template']['path']);
 
+$pluginLoader->registerPluginServices($container);
+
 $pluginLoader->registerPluginMiddlewares($app, $container);
 
 $app->add(new MenuMiddleware($container));

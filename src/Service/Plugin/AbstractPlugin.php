@@ -29,6 +29,11 @@ abstract class AbstractPlugin implements PluginInterface {
 	/**
 	 * @inheritDoc
 	 */
+	abstract public function registerServices(ContainerInterface $container): void;
+
+	/**
+	 * @inheritDoc
+	 */
 	abstract public function registerMiddlewares(App $app, ContainerInterface $container): void;
 
 	/**

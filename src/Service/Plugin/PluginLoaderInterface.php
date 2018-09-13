@@ -25,6 +25,15 @@ interface PluginLoaderInterface {
 	public function loadPlugins(ContainerInterface $container): void;
 
 	/**
+	 * Register all services here
+	 *
+	 * @param ContainerInterface $container
+	 *
+	 * @return void
+	 */
+	public function registerPluginServices(ContainerInterface $container): void;
+
+	/**
 	 * Register all middlewares here
 	 *
 	 * @param App $app

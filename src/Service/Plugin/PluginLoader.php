@@ -38,7 +38,16 @@ class PluginLoader implements PluginLoaderInterface {
 	 */
 	public function loadPlugins(ContainerInterface $container): void {
 		foreach ($this->plugins as $plugin) {
-			$container = $plugin->load($container);
+			$plugin->load($container);
+		}
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function registerPluginServices(ContainerInterface $container): void {
+		foreach ($this->plugins as $plugin) {
+			$plugin->registerServices($container);
 		}
 	}
 
