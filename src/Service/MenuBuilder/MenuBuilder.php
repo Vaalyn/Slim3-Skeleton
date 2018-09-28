@@ -7,6 +7,7 @@ namespace App\Service\MenuBuilder;
 use App\Service\Authentication\AuthenticationInterface;
 use App\Service\Authorization\AuthorizationInterface;
 use App\Service\MenuBuilder\Constants\MenuBuilderConstants;
+use Slim\Http\Request;
 use Slim\Interfaces\RouterInterface;
 
 class MenuBuilder implements MenuBuilderInterface {
@@ -43,7 +44,7 @@ class MenuBuilder implements MenuBuilderInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function buildMenuFromConfig(string $name, array $menuConfig): MenuInterface {
+	public function buildMenuFromConfig(string $name, array $menuConfig, Request $request): MenuInterface {
 		$menu = new Menu(
 			$name,
 			$menuConfig[MenuBuilderConstants::MENU_CONFIG_KEY_IS_LEFT],
@@ -54,9 +55,9 @@ class MenuBuilder implements MenuBuilderInterface {
 		$menuItemConfigs = $menuConfig[MenuBuilderConstants::MENU_CONFIG_KEY_MENU_ITEMS];
 
 		foreach ($menuItemConfigs as $menuItemName => $menuItemConfig) {
-			$menuItem = $this->buildMenuItemFromConfig($menuItemName, $menuItemConfig);
+			$menuItem = $this->buildMenuItemFromConfig($menuItemName, $menuItemConfig, $request);
 
-			if (!$this->hasAccessToMenuItem($menuItem)) {
+			if (!$this->hasAccessToMenuItem($menuItem, $request)) {
 				continue;
 			}
 
@@ -73,7 +74,7 @@ class MenuBuilder implements MenuBuilderInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function buildMenuItemFromConfig(string $name, array $menuItemConfig): MenuItemInterface {
+	public function buildMenuItemFromConfig(string $name, array $menuItemConfig, Request $request): MenuItemInterface {
 		$menuItem = new MenuItem(
 			$name,
 			$menuItemConfig[MenuBuilderConstants::MENU_ITEM_CONFIG_KEY_DISPLAY_NAME],
@@ -89,13 +90,13 @@ class MenuBuilder implements MenuBuilderInterface {
 		$menuItemConfigs = $menuItemConfig[MenuBuilderConstants::MENU_ITEM_CONFIG_KEY_MENU_ITEMS] ?? [];
 
 		foreach ($menuItemConfigs as $subMenuItemName => $subMenuItemConfig) {
-			$subMenuItem = $this->buildMenuItemFromConfig($subMenuItemName, $subMenuItemConfig);
+			$subMenuItem = $this->buildMenuItemFromConfig($subMenuItemName, $subMenuItemConfig, $request);
 
 			if (!$menuItem->isDropdown()) {
 				$menuItem->setIsDropdown(true);
 			}
 
-			if (!$this->hasAccessToMenuItem($subMenuItem)) {
+			if (!$this->hasAccessToMenuItem($subMenuItem, $request)) {
 				continue;
 			}
 
@@ -130,10 +131,11 @@ class MenuBuilder implements MenuBuilderInterface {
 
 	/**
 	 * @param MenuItemInterface $menuItem
+	 * @param Request $request
 	 *
 	 * @return bool
 	 */
-	protected function hasAccessToMenuItem(MenuItemInterface $menuItem): bool {
+	protected function hasAccessToMenuItem(MenuItemInterface $menuItem, Request $request): bool {
 		$routeName = $menuItem->getRouteName();
 
 		if ($routeName === null) {
@@ -148,18 +150,20 @@ class MenuBuilder implements MenuBuilderInterface {
 			return true;
 		}
 
-		return $this->hasAuthorizationForRoute($routeName);
+		return $this->hasAuthorizationForRoute($routeName, $request);
 	}
 
 	/**
 	 * @param string $routeName
+	 * @param Request $request
 	 *
 	 * @return bool
 	 */
-	protected function hasAuthorizationForRoute(string $routeName): bool {
+	protected function hasAuthorizationForRoute(string $routeName, Request $request): bool {
 		return $this->authorization->hasAuthorizationForRoute(
 			$this->authentication->user(),
-			$routeName
+			$routeName,
+			$request
 		);
 	}
 

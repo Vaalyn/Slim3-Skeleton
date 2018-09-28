@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Service\Authentication;
 
-use App\Model\AuthToken;
+use App\Model\AuthenticationToken;
 use App\Model\User;
 use App\Service\Authorization\AuthorizationInterface;
 use App\Service\Session\Session;
@@ -108,22 +108,22 @@ class Authentication implements AuthenticationInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function invalidateAuthTokens(): void {
+	public function invalidateAuthenticationTokens(): void {
 		$invalidationDateTime = new Carbon();
 		$invalidationDateTime->subSeconds($this->cookieConfig['expire']);
 
-		$authTokens = AuthToken::where('created_at', '<', $invalidationDateTime->toDateTimeString())->get();
+		$authenticationTokens = AuthenticationToken::where('created_at', '<', $invalidationDateTime->toDateTimeString())->get();
 
-		foreach ($authTokens as $authToken) {
-			$this->invalidateAuthToken($authToken);
+		foreach ($authenticationTokens as $authenticationToken) {
+			$this->invalidateAuthenticationToken($authenticationToken);
 		}
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function invalidateAuthToken(AuthToken $authToken): void {
-		$authToken->delete();
+	public function invalidateAuthenticationToken(AuthenticationToken $authenticationToken): void {
+		$authenticationToken->delete();
 	}
 
 	/**
@@ -148,13 +148,7 @@ class Authentication implements AuthenticationInterface {
 	 * @inheritDoc
 	 */
 	public function routeNeedsAuthentication(string $routeName): bool {
-		$needsAuthentication = in_array($routeName, $this->routesWithAuthentication);
-
-		if ($needsAuthentication) {
-			return true;
-		}
-
-		return $this->authorization->needsAuthorizationForRoute($routeName);
+		return in_array($routeName, $this->routesWithAuthentication);
 	}
 
 	/**
@@ -196,14 +190,14 @@ class Authentication implements AuthenticationInterface {
 			$browserParser->device() ?? ''
 		);
 
-		$authToken                = new AuthToken();
-		$authToken->auth_token_id = Uuid::uuid4()->toString();
-		$authToken->user_id       = $user->user_id;
-		$authToken->token         = password_hash($token, PASSWORD_DEFAULT);
-		$authToken->browser       = $browser;
-		$authToken->save();
+		$authenticationToken                          = new AuthenticationToken();
+		$authenticationToken->authentication_token_id = Uuid::uuid4()->toString();
+		$authenticationToken->user_id                 = $user->user_id;
+		$authenticationToken->token                   = password_hash($token, PASSWORD_DEFAULT);
+		$authenticationToken->browser                 = $browser;
+		$authenticationToken->save();
 
-		$this->session->set('auth_token_id', $authToken->auth_token_id);
+		$this->session->set('authentication_token_id', $authenticationToken->authentication_token_id);
 
 		return $token;
 	}
@@ -212,17 +206,20 @@ class Authentication implements AuthenticationInterface {
 	 * @return void
 	 */
 	protected function checkLoginCookie(): void {
-		$this->invalidateAuthTokens();
+		$this->invalidateAuthenticationTokens();
 
 		if (isset($_COOKIE[$this->cookieConfig['name']])) {
-			$cookie     = json_decode($_COOKIE[$this->cookieConfig['name']]);
-			$authTokens = User::where('username', '=', $cookie->username)->first()->authTokens;
+			$cookie = json_decode($_COOKIE[$this->cookieConfig['name']]);
 
-			foreach ($authTokens as $authToken) {
-				if (password_verify($cookie->token, $authToken->token)) {
+			$authenticationTokens = User::where('username', '=', $cookie->username)
+				->first()
+				->authenticationTokens;
+
+			foreach ($authenticationTokens as $authenticationToken) {
+				if (password_verify($cookie->token, $authenticationToken->token)) {
 					$this->session
-						->set('user_id', $authToken->user->user_id)
-						->set('auth_token_id', $authToken->auth_token_id);
+						->set('user_id', $authenticationToken->user->user_id)
+						->set('authentication_token_id', $authenticationToken->authentication_token_id);
 
 					break;
 				}

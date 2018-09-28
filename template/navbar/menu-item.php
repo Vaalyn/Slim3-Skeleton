@@ -18,6 +18,10 @@
 			<?php else : ?>
 				<?php echo htmlentities($menuItem->getDisplayName()); ?>
 			<?php endif; ?>
+
+			<?php if ($menuItem->getMenuItems() !== null) : ?>
+				<i class="material-icons right">arrow_drop_down</i>
+			<?php endif; ?>
 		</a>
 
 		<?php if ($menuItem->getMenuItems() !== null) : ?>

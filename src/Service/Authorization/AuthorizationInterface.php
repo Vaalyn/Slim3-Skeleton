@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Service\Authorization;
 
 use App\Model\User;
+use Slim\Http\Request;
 
 interface AuthorizationInterface {
 	/**
@@ -15,10 +16,11 @@ interface AuthorizationInterface {
 	public function needsAuthorizationForRoute(string $routeName): bool;
 
 	/**
-	 * @param User $user
+	 * @param User|null $user
 	 * @param string $routeName
+	 * @param Request $request
 	 *
 	 * @return bool
 	 */
-	public function hasAuthorizationForRoute(User $user, string $routeName): bool;
+	public function hasAuthorizationForRoute(?User $user, string $routeName, Request $request): bool;
 }

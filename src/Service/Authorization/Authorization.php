@@ -6,6 +6,7 @@ namespace App\Service\Authorization;
 
 use App\Model\User;
 use Psr\Container\ContainerInterface;
+use Slim\Http\Request;
 
 class Authorization implements AuthorizationInterface {
 	/**
@@ -36,15 +37,19 @@ class Authorization implements AuthorizationInterface {
 	/**
 	 * @inheritDoc
 	 */
-	public function hasAuthorizationForRoute(User $user, string $routeName): bool {
+	public function hasAuthorizationForRoute(?User $user, string $routeName, Request $request): bool {
 		if (!$this->needsAuthorizationForRoute($routeName)) {
 			return true;
 		}
 
 		foreach ($this->routesWithAuthorization[$routeName] as $authorizerType) {
 			$authorizer = $this->authorizerFactory->create($authorizerType);
+
+			if ($authorizer->isAuthorized($user, $request)) {
+				return true;
+			}
 		}
 
-		return $authorizer->isAuthorized($user);
+		return false;
 	}
 }

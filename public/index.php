@@ -15,6 +15,7 @@ use App\Service\MenuBuilder\MenuBuilder;
 use App\Service\NotFoundHandler\NotFoundHandler;
 use App\Service\Plugin\PluginLoader;
 use App\Service\Session\Session;
+use Slim\Flash\Messages;
 use Slim\Views\PhpRenderer;
 
 $app          = new \Slim\App(require_once __DIR__ . '/../config/config.php');
@@ -36,7 +37,7 @@ $container['authorization']   = new Authorization($container);
 $container['authentication']  = new Authentication($container);
 $container['database']        = EloquentFactory::create($container->config['database']);
 $container['errorHandler']    = new ErrorHandler();
-$container['flashMessages']   = new \Slim\Flash\Messages();
+$container['flashMessages']   = new Messages();
 $container['menuBuilder']     = new MenuBuilder($container->router, $container->authentication, $container->authorization);
 $container['notFoundHandler'] = new NotFoundHandler();
 $container['phpErrorHandler'] = new ErrorHandler();

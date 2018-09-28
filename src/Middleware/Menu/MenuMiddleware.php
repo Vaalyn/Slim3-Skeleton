@@ -39,7 +39,7 @@ class MenuMiddleware {
 		$menus = [];
 
 		foreach ($this->menuConfigs as $menuName => $menuConfig) {
-			$menu = $this->menuBuilder->buildMenufromConfig($menuName, $menuConfig);
+			$menu = $this->menuBuilder->buildMenufromConfig($menuName, $menuConfig, $request);
 			$menus[$menu->getName()] = $menu;
 		}
 

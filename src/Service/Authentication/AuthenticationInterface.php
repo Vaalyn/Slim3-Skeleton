@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Service\Authentication;
 
-use App\Model\AuthToken;
+use App\Model\AuthenticationToken;
 use App\Model\User;
 
 interface AuthenticationInterface {
@@ -35,14 +35,14 @@ interface AuthenticationInterface {
 	/**
 	 * @return void
 	 */
-	public function invalidateAuthTokens(): void;
+	public function invalidateAuthenticationTokens(): void;
 
 	/**
-	 * @param AuthToken $authToken
+	 * @param AuthenticationToken $authenticationToken
 	 *
 	 * @return void
 	 */
-	public function invalidateAuthToken(AuthToken $authToken): void;
+	public function invalidateAuthenticationToken(AuthenticationToken $authenticationToken): void;
 
 	/**
 	 * @return void

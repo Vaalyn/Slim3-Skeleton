@@ -58,11 +58,7 @@ class AuthorizationMiddleware {
 
 		$user = $this->authentication->user();
 
-		if ($user === null) {
-			return $response->withRedirect($this->router->pathFor('login'));
-		}
-
-		if (!$this->authorization->hasAuthorizationForRoute($user, $currentRouteName)) {
+		if (!$this->authorization->hasAuthorizationForRoute($user, $currentRouteName, $request)) {
 			return $response->withStatus(400)
 				->withHeader('Content-Type', 'application/json')
 				->write(json_encode(array(

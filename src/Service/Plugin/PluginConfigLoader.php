@@ -57,7 +57,7 @@ class PluginConfigLoader implements PluginConfigLoaderInterface {
 		$pluginConfig = $this->getDefaultPluginConfig();
 
 		if ($this->isPluginConfigAvailable()) {
-			$pluginConfig = array_merge_recursive($pluginConfig, $this->getPluginConfig());
+			$pluginConfig = $this->arrayMergeRecursiveDistinct($pluginConfig, $this->getPluginConfig());
 		}
 
 		if ($this->pluginConfigValidator !== null) {
@@ -103,5 +103,26 @@ class PluginConfigLoader implements PluginConfigLoaderInterface {
 	 */
 	protected function isPluginConfigAvailable(): bool {
 		return array_key_exists($this->pluginName, $this->getPluginConfigs());
+	}
+
+	/**
+	 * @param array $baseArray
+	 * @param array $arrayToMerge
+	 *
+	 * @return array
+	 */
+	protected function arrayMergeRecursiveDistinct(array $baseArray, array $arrayToMerge): array {
+		$mergedArray = $baseArray;
+
+		foreach ($arrayToMerge as $key => $value) {
+			if (is_array($value) && isset($mergedArray[$key]) && is_array($mergedArray[$key])) {
+				$mergedArray[$key] = $this->arrayMergeRecursiveDistinct($mergedArray[$key], $value);
+			}
+			else {
+				$mergedArray[$key] = $value;
+			}
+		}
+
+		return $mergedArray;
 	}
 }
