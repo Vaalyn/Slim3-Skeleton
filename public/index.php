@@ -13,10 +13,10 @@ use App\Service\ErrorHandler\ErrorHandler;
 use App\Service\Factory\Eloquent\EloquentFactory;
 use App\Service\MenuBuilder\MenuBuilder;
 use App\Service\NotFoundHandler\NotFoundHandler;
-use App\Service\Plugin\PluginLoader;
 use App\Service\Session\Session;
 use Slim\Flash\Messages;
 use Slim\Views\PhpRenderer;
+use Vaalyn\PluginService\PluginLoader;
 
 $app          = new \Slim\App(require_once __DIR__ . '/../config/config.php');
 $container    = $app->getContainer();
