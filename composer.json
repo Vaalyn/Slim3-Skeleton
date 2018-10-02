@@ -1,5 +1,6 @@
 {
     "require": {
+		"php": ">=7.2.0",
         "akrabat/ip-address-middleware": "^1.0",
         "illuminate/database": "^5.5",
         "jenssegers/agent": "^2.6",
