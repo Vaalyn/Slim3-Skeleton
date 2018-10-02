@@ -13,16 +13,6 @@
         "vaalyn/plugin-service": "dev-master",
         "wikimedia/composer-merge-plugin": "^1.4"
     },
-	"repositories": [
-		{
-			"type": "git",
-			"url": "git@github.com:Vaalyn/config-loader-service.git"
-		},
-		{
-			"type": "git",
-			"url": "git@github.com:Vaalyn/plugin-service.git"
-		}
-	],
 	"autoload": {
         "psr-4": {
 			"App\\": "src"
