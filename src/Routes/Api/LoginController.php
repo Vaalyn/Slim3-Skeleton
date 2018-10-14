@@ -4,10 +4,10 @@ declare(strict_types = 1);
 
 namespace App\Routes\Api;
 
-use App\Service\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Vaalyn\AuthenticationService\AuthenticationInterface;
 
 class LoginController {
 	/**

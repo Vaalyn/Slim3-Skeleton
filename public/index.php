@@ -4,19 +4,19 @@ declare(strict_types = 1);
 
 require '../vendor/autoload.php';
 
-use App\Middleware\Authentication\AuthenticationMiddleware;
-use App\Middleware\Authorization\AuthorizationMiddleware;
-use App\Middleware\Menu\MenuMiddleware;
-use App\Service\Authentication\Authentication;
-use App\Service\Authorization\Authorization;
 use App\Service\ErrorHandler\ErrorHandler;
 use App\Service\Factory\Eloquent\EloquentFactory;
-use App\Service\MenuBuilder\MenuBuilder;
 use App\Service\NotFoundHandler\NotFoundHandler;
-use App\Service\Session\Session;
 use Slim\Flash\Messages;
 use Slim\Views\PhpRenderer;
+use Vaalyn\AuthenticationService\Authentication;
+use Vaalyn\AuthenticationService\Middleware\AuthenticationMiddleware;
+use Vaalyn\AuthorizationService\Authorization;
+use Vaalyn\AuthorizationService\Middleware\AuthorizationMiddleware;
+use Vaalyn\MenuBuilderService\MenuBuilder;
+use Vaalyn\MenuBuilderService\Middleware\MenuMiddleware;
 use Vaalyn\PluginService\PluginLoader;
+use Vaalyn\SessionService\Session;
 
 $app          = new \Slim\App(require_once __DIR__ . '/../config/config.php');
 $container    = $app->getContainer();
@@ -33,9 +33,9 @@ if (file_exists(__DIR__ . '/../config/plugins.php')) {
 $pluginLoader->loadPlugins($container);
 
 $container['session']         = (new Session($container->config['session']))->start();
-$container['authorization']   = new Authorization($container);
-$container['authentication']  = new Authentication($container);
 $container['database']        = EloquentFactory::create($container->config['database']);
+$container['authorization']   = new Authorization($container);
+$container['authentication']  = new Authentication($container, $container->database);
 $container['errorHandler']    = new ErrorHandler();
 $container['flashMessages']   = new Messages();
 $container['menuBuilder']     = new MenuBuilder($container->router, $container->authentication, $container->authorization);

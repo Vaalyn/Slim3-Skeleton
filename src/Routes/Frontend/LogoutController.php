@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace App\Routes\Frontend;
 
-use App\Service\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Interfaces\RouterInterface;
+use Vaalyn\AuthenticationService\AuthenticationInterface;
 
 class LogoutController {
 	/**

@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace App\Routes\Frontend;
 
-use App\Service\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Flash\Messages;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Interfaces\RouterInterface;
 use Slim\Views\PhpRenderer;
+use Vaalyn\AuthenticationService\AuthenticationInterface;
 
 class LoginController {
 	/**

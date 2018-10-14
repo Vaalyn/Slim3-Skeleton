@@ -39,6 +39,7 @@ class Migration extends AbstractMigration {
 			->addColumn('user_id',     'integer',  ['identity' => true])
 			->addColumn('username',    'string',   ['limit' => 255, 'null' => false])
 			->addColumn('password',    'string',   ['limit' => 255, 'null' => false])
+			->addColumn('email',       'string',   ['limit' => 255, 'null' => false])
 			->addColumn('is_admin',    'boolean',  ['default' => false, 'null' => false])
 			->addColumn('created_at',  'datetime', ['null' => false])
 			->addColumn('updated_at',  'datetime', ['null' => false])
