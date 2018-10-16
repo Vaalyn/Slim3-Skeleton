@@ -1845,12 +1845,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vaalyn/authentication-service.git",
-                "reference": "380c41518a2876560a06709fc833b880ea015b7c"
+                "reference": "c6654929ec4fb49ef2e7f298ad7a38e08ceaeeb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vaalyn/authentication-service/zipball/380c41518a2876560a06709fc833b880ea015b7c",
-                "reference": "380c41518a2876560a06709fc833b880ea015b7c",
+                "url": "https://api.github.com/repos/Vaalyn/authentication-service/zipball/c6654929ec4fb49ef2e7f298ad7a38e08ceaeeb4",
+                "reference": "c6654929ec4fb49ef2e7f298ad7a38e08ceaeeb4",
                 "shasum": ""
             },
             "require": {
@@ -1888,7 +1888,7 @@
                 "service",
                 "slim"
             ],
-            "time": "2018-10-13T18:02:06+00:00"
+            "time": "2018-10-14T14:38:38+00:00"
         },
         {
             "name": "vaalyn/authorization-service",
@@ -1896,12 +1896,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vaalyn/authorization-service.git",
-                "reference": "f2383b3f632b140fb6feaead3ec6d58ac446f8e6"
+                "reference": "106e62c4c9f90b2f236e573a03b1e40e92dd0dc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vaalyn/authorization-service/zipball/f2383b3f632b140fb6feaead3ec6d58ac446f8e6",
-                "reference": "f2383b3f632b140fb6feaead3ec6d58ac446f8e6",
+                "url": "https://api.github.com/repos/Vaalyn/authorization-service/zipball/106e62c4c9f90b2f236e573a03b1e40e92dd0dc5",
+                "reference": "106e62c4c9f90b2f236e573a03b1e40e92dd0dc5",
                 "shasum": ""
             },
             "require": {
@@ -1935,7 +1935,7 @@
                 "service",
                 "slim"
             ],
-            "time": "2018-10-13T16:32:24+00:00"
+            "time": "2018-10-14T14:42:33+00:00"
         },
         {
             "name": "vaalyn/config-loader-service",
@@ -2081,12 +2081,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vaalyn/session-service.git",
-                "reference": "9664840ee04059a5df8e4bd0ab47d916d72f6486"
+                "reference": "57fc9bc111246d8fa44d3100175fa64cd50b988a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vaalyn/session-service/zipball/9664840ee04059a5df8e4bd0ab47d916d72f6486",
-                "reference": "9664840ee04059a5df8e4bd0ab47d916d72f6486",
+                "url": "https://api.github.com/repos/Vaalyn/session-service/zipball/57fc9bc111246d8fa44d3100175fa64cd50b988a",
+                "reference": "57fc9bc111246d8fa44d3100175fa64cd50b988a",
                 "shasum": ""
             },
             "require": {
@@ -2115,7 +2115,7 @@
                 "session",
                 "slim"
             ],
-            "time": "2018-10-09T19:57:22+00:00"
+            "time": "2018-10-15T20:35:36+00:00"
         },
         {
             "name": "wikimedia/composer-merge-plugin",
