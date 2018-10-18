@@ -1,5 +1,5 @@
 <?php
 
 return [
-	'admin' => '\App\Service\Authorization\Authorizer\AdminAuthorizer'
+	'admin' => '\Vaalyn\AuthorizationService\Authorizer\AdminAuthorizer'
 ];
