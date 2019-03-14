@@ -35,14 +35,14 @@ class LoginController {
 		$rememberMe = isset($request->getParsedBody()['remember_me']) ? true : false;
 
 		if (!$this->authentication->attempt($username, $password, $rememberMe)) {
-			return $response->write(json_encode(array(
+			return $response->withJson([
 				'status' => 'error',
 				'errors' => $exception->getMessage()
-			)));
+			]);
 		}
 
-		return $response->write(json_encode(array(
+		return $response->withJson([
 			'status' => 'success'
-		)));
+		]);
 	}
 }

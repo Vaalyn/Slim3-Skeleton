@@ -23,11 +23,9 @@ class PingController {
 	 * @return Response
 	 */
 	public function __invoke(Request $request, Response $response, array $args): Response {
-		$response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-
-		return $response->write(json_encode(array(
+		return $response->withJson([
 			'status' => 'success',
 			'message' => 'Pong'
-		)));
+		]);
 	}
 }
