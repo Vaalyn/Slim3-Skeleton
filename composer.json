@@ -16,7 +16,8 @@
 		"vaalyn/menu-builder-service": "dev-master",
         "vaalyn/plugin-service": "dev-master",
 		"vaalyn/session-service": "dev-master",
-        "wikimedia/composer-merge-plugin": "^1.4"
+        "wikimedia/composer-merge-plugin": "^1.4",
+        "monolog/monolog": "^1.24"
     },
 	"autoload": {
         "psr-4": {

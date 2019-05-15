@@ -7,6 +7,8 @@ require '../vendor/autoload.php';
 use App\Service\ErrorHandler\ErrorHandler;
 use App\Service\Factory\Eloquent\EloquentFactory;
 use App\Service\NotFoundHandler\NotFoundHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Slim\Flash\Messages;
 use Slim\Views\PhpRenderer;
 use Vaalyn\AuthenticationService\Authentication;
@@ -32,6 +34,7 @@ if (file_exists(__DIR__ . '/../config/plugins.php')) {
 
 $pluginLoader->loadPlugins($container);
 
+$container['logger']          = new Logger('logs', [new StreamHandler('php://stderr', Logger::WARNING, true)]);
 $container['session']         = (new Session($container->config['session']))->start();
 $container['database']        = EloquentFactory::create($container->config['database']);
 $container['authorization']   = new Authorization($container);

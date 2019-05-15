@@ -6,14 +6,27 @@ namespace App\Service\ErrorHandler;
 
 use Closure;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 class ErrorHandler {
 	/**
+	 * @var LoggerInterface
+	 */
+	protected $logger;
+
+	/**
 	 * @var array
 	 */
 	protected $settings;
+
+	/**
+	 * @param LoggerInterface $logger
+	 */
+	public function __construct(LoggerInterface $logger) {
+		$this->logger = $logger;
+	}
 
 	/**
 	 * @param ContainerInterface $container
@@ -40,6 +53,11 @@ class ErrorHandler {
 		if ($this->settings['displayErrorDetails']) {
 			$message .= '<pre>' . $error . '</pre>';
 		}
+
+		$this->logger->error(
+			$error->getMessage(),
+			$error->getTrace()
+		);
 
 		return $response
 			->withStatus(500)
