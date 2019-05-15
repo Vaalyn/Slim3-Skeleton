@@ -1,23 +1,23 @@
 {
     "require": {
-		"php": ">=7.2.0",
+        "php": ">=7.2.0",
         "akrabat/ip-address-middleware": "^1.0",
         "illuminate/database": "^5.5",
         "jenssegers/agent": "^2.6",
+        "monolog/monolog": "^1.24",
         "moontoast/math": "^1.1",
         "ramsey/uuid": "^3.7",
         "robmorgan/phinx": "^0.9.1",
         "slim/flash": "^0.2.0",
         "slim/php-view": "^2.2",
         "slim/slim": "^3.11",
-		"vaalyn/authentication-service": "dev-master",
-		"vaalyn/authorization-service": "dev-master",
+        "vaalyn/authentication-service": "dev-master",
+        "vaalyn/authorization-service": "dev-master",
         "vaalyn/config-loader-service": "dev-master",
-		"vaalyn/menu-builder-service": "dev-master",
+        "vaalyn/menu-builder-service": "dev-master",
         "vaalyn/plugin-service": "dev-master",
-		"vaalyn/session-service": "dev-master",
-        "wikimedia/composer-merge-plugin": "^1.4",
-        "monolog/monolog": "^1.24"
+        "vaalyn/session-service": "dev-master",
+        "wikimedia/composer-merge-plugin": "^1.4"
     },
 	"autoload": {
         "psr-4": {
